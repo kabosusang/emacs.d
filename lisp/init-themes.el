@@ -19,7 +19,7 @@
 		;; Global settings (defaults)
 		(setq doom-themes-enable-bold nil    ; if nil, bold is universally disabled
 			  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-		(load-theme 'doom-monokai-octagon t)
+		(load-theme 'doom-gruvbox t)
 
 		;; Enable flashing mode-line on errors
 		;; (doom-themes-visual-bell-config)
@@ -35,7 +35,7 @@
 	(add-to-list 'load-path (expand-file-name "themes" user-emacs-directory))
 	(add-to-list 'custom-theme-load-path
 				 (expand-file-name "themes" user-emacs-directory))
-	(load-theme 'monokai-pro t)))
+	(load-theme 'doom-gruvbox t)))
 
 (when *is-a-mac*
   (use-package all-the-icons
