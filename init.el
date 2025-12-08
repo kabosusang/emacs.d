@@ -146,17 +146,16 @@
   :ensure t)
 
 (use-package company
-  :ensure t
-  :init (global-company-mode)
-  :config
-  (setq company-minimum-prefix-length 1)
-  (setq company-tooltip-align-annotations t)
-  (setq company-idle-delay 0.0)
-  (setq company-show-numbers t) ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (setq company-selection-wrap-around t)
-  (setq company-transformers '(company-sort-by-occurrence))
-  (setq company-require-match nil)
-  (setq company-frontends '(company-preview-frontend)))
+ :ensure t
+ :init (global-company-mode)
+ :config
+ (setq company-minimum-prefix-length 1) ; 只需敲 1 个字母就开始进行自动补全
+ (setq company-tooltip-align-annotations t)
+   (setq company-idle-delay 0.0)
+ (setq company-show-numbers t) ;; 给选项编号 (按快捷键 M-1、M-2 等等来进行选择).
+ (setq company-selection-wrap-around t)
+ (setq company-transformers '(company-sort-by-occurrence))) ; 根据选择的频率进行排序，读者如果不喜欢可以去掉
+
 
 (use-package company-box
   :ensure t
@@ -286,24 +285,35 @@
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l"
-		lsp-file-watch-threshold 500)
-  ;; lsp-prefer-flymake nil)
+        lsp-file-watch-threshold 500)
   :hook
-  (lsp-mode . lsp-enable-which-key-integration) ; which-key integration
+  ;; 为 C、Python、C++、Rust 自动开启 LSP
+  ((c-mode          . lsp-deferred)
+   (python-mode     . lsp-deferred)
+   (c++-mode        . lsp-deferred)
+   (rust-mode       . lsp-deferred)
+   ;; 可以根据需要添加其他语言，如：
+   ;; (go-mode         . lsp-deferred)
+   ;; (js-mode         . lsp-deferred)
+   (lsp-mode . lsp-enable-which-key-integration)) ; which-key integration
   :commands (lsp lsp-deferred)
   :config
   (setq lsp-completion-provider :none)
   (setq lsp-headerline-breadcrumb-enable t)
   ;; (add-to-list 'lsp-clients-clangd-args "--clang-tidy")
-  :bind
-  ("C-c l s" . lsp-ivy-workspace-symbol))
-  ; :commands lsp
-  ;; :config
-  ;; (lsp-register-client
-  ;;  (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
-  ;; 					:major-modes '(python-mode)
-  ;; 					:remote? t
-  ;; 					:server-id 'pyls-remote))
+  ;; 自定义按键绑定
+  :bind (:map lsp-mode-map
+         ;; F12 跳转到定义
+         ("<f12>" . lsp-find-definition)
+         ;; M-左方向键 返回之前位置
+         ("M-<left>" . xref-pop-marker-stack)
+         ;; 可选：其他有用的绑定
+         ("M-?" . lsp-find-references) ; 查找引用
+         ("C-c C-d" . lsp-describe-thing-at-point))) ; 查看文档
+
+;; 原来的这个绑定可以保留（如果你需要的话）
+(use-package lsp-mode
+  :bind ("C-c l s" . lsp-ivy-workspace-symbol))
 
 (use-package lsp-ui
   :ensure t
@@ -315,6 +325,7 @@
 (use-package lsp-ivy
   :ensure t
   :after (lsp-mode))
+
 
 (use-package dap-mode
   :ensure t
@@ -478,7 +489,7 @@ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cu
 ;; Python
 ;; (require 'init-python)
 (require 'init-programming)
-(require 'init-org)
+;(require 'init-org)
 
 ;; rainbow delimiters
 (use-package rainbow-delimiters
