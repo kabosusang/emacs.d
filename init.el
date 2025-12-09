@@ -33,6 +33,7 @@
 ;; Allow users to provide an optional "init-preload-local.el"
 (require 'init-preload-local nil t)
 (require 'init-themes)
+(require 'init-font)
 
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d

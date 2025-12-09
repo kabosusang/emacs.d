@@ -27,3 +27,6 @@ amx-items
 transient/
 projects
 games/
+.eln-cache/
+eln-cache/
+

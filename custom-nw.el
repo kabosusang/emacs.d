@@ -4,10 +4,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "14850c68376012a083ed7ec9d36179962b165cd8f7536f021ee3b6f5cb68aa3c" "3a2f8087795a6a06d5a57cec6569dbbb98211f86ae3ad9ce931a5a3340b32569" default))
+   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+	 "14850c68376012a083ed7ec9d36179962b165cd8f7536f021ee3b6f5cb68aa3c"
+	 "3a2f8087795a6a06d5a57cec6569dbbb98211f86ae3ad9ce931a5a3340b32569"
+	 default))
  '(line-number-mode t)
- '(package-selected-packages
-   '(exec-path-from-shell gnu-elpa-keyring-update fullframe seq yaml-mode auto-complete flycheck-rust rust-mode sml-mode projectile org magit slime flycheck avy rainbow-delimiters multiple-cursors))
+ '(package-selected-packages nil)
  '(safe-local-variable-values
    '((flycheck-clang-include-path list
 								  (concat "-I"

@@ -5,36 +5,45 @@
  ;; If there is more than one, they won't work right.
  '(codeium/metadata/api_key "2d487642-54f2-4cfa-936d-ed07baec760b")
  '(custom-safe-themes
-   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "14850c68376012a083ed7ec9d36179962b165cd8f7536f021ee3b6f5cb68aa3c" "3a2f8087795a6a06d5a57cec6569dbbb98211f86ae3ad9ce931a5a3340b32569" default))
+   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+	 "14850c68376012a083ed7ec9d36179962b165cd8f7536f021ee3b6f5cb68aa3c"
+	 "3a2f8087795a6a06d5a57cec6569dbbb98211f86ae3ad9ce931a5a3340b32569"
+	 default))
  '(ivy-mode t)
  '(package-selected-packages
-   '(chatgpt-shell org-ref org-roam org-ref-ivy org-ref-bib helpful meow flycheck-clang-tidy csv-mode queue cider cmake-mode clang-format pyvenv-mode pyvenv lsp-pyright tiny yasnippet-snippets dirvish good-scroll use-package-hydra embark marginalia exec-path-from-shell gnu-elpa-keyring-update fullframe seq amx dap-mode projectile-ripgrep dashboard rainbow-mode pdf-tools auctex))
+   '(all-the-icons-nerd-fonts amx cargo clang-format cmake-mode
+							  company-box counsel-projectile dap-mode
+							  dashboard doom-themes embark
+							  exec-path-from-shell flycheck-clang-tidy
+							  helpful highlight-symbol lsp-ivy
+							  lsp-pyright lsp-ui magit marginalia
+							  multiple-cursors mwim pyvenv
+							  rainbow-delimiters rust-mode
+							  smart-mode-line tiny treemacs-projectile
+							  undo-tree use-package-hydra yaml-mode
+							  yasnippet-snippets))
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((TeX-master quote dwim)
-	 (TeX-master concat
-				 (projectile-project-root)
-				 "bifrost")
+	 (TeX-master concat (projectile-project-root) "bifrost")
 	 (TeX-engine . pdflatex)
 	 (eval dap-register-debug-template "NS3::Debug"
-		   (list :type "lldb-vscode" :cwd
-				 (projectile-project-root)
+		   (list :type "lldb-vscode" :cwd (projectile-project-root)
 				 :request "launch" :program
-				 (lambda nil
-				   (read-file-name "Select file to debug: "))
+				 (lambda nil (read-file-name "Select file to debug: "))
 				 :name "NS3::Debug"))
 	 (eval dap-register-debug-template "NS3::Debug"
-		   (list :type "lldb-vscode" :cwd
-				 (projectile-project-root)
-				 :request "launch" :program "build/scratch/ns3.36.1-dumbell-debug" :name "NS3::Debug"))
+		   (list :type "lldb-vscode" :cwd (projectile-project-root)
+				 :request "launch" :program
+				 "build/scratch/ns3.36.1-dumbell-debug" :name
+				 "NS3::Debug"))
 	 (flycheck-clang-include-path list
 								  (concat "-I"
 										  (projectile-project-root)
 										  "build/include/"))
 	 (py-indent-offset . 4)
 	 (flycheck-clang-include-path list concat "-I"
-								  (projectile-project-root)
-								  "include")
+								  (projectile-project-root) "include")
 	 (flycheck-clang-include-path list
 								  (concat "-I"
 										  (projectile-project-root)
