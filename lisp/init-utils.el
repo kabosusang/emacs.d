@@ -153,5 +153,12 @@
 		(when (string-match (rx "\"" (group (0+ (or (1+ (not (any "\"" "\\"))) (seq "\\" anything)))) "\"") passwd)
 		  (match-string 1 passwd))))))
 
+
+;; 将自动保存文件集中至 ~/.emacs.d/auto-save/
+(setq auto-save-file-name-transforms
+      '((".*" "~/.emacs.d/auto-save/" t)))
+
+
+
 (provide 'init-utils)
 ;;; init-utils.el ends here

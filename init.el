@@ -35,6 +35,9 @@
 (require 'init-themes)
 (require 'init-font)
 
+;;auto-save
+(require 'init-auto-save)
+
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   ;; (add-to-list 'load-path "elpa/use-package-2.4.1/")
