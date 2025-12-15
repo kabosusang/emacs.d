@@ -178,6 +178,10 @@
   :functions dap-register-debug-template
   :hook
   (rust-mode . lsp-deferred)
+  :bind
+  (:map rust-mode-map
+        ("C-c f" . rust-format-buffer)
+        ("C-c C-f" . rust-format-buffer))
   :config
   ;; debug
   (require 'dap-gdb-lldb)

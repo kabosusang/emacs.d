@@ -29,4 +29,8 @@ projects
 games/
 .eln-cache/
 eln-cache/
+auto-save/
+auto-save-list/
+
+
 

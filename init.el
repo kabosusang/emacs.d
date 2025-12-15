@@ -494,6 +494,11 @@ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cu
 ;; (require 'init-python)
 (require 'init-programming)
 ;(require 'init-org)
+;;scheme
+(require 'init-programming-scheme)
+
+
+
 
 ;; rainbow delimiters
 (use-package rainbow-delimiters
