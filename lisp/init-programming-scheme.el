@@ -27,8 +27,9 @@
   (cond
    ((= 1 (count-windows))
     (delete-other-windows)
-    (split-window-horizontally (floor (* 0.65 (window-width))))
-    (other-window 1)
+;    (split-window-horizontally (floor (* 0.65 (window-width))))
+	 (split-window-vertically (floor (* 0.68 (window-height))))
+	(other-window 1)
     (switch-to-buffer "*scheme*")
     (other-window 1))
    (t
@@ -48,6 +49,13 @@
   (scheme-split-window)
   (scheme-send-definition))
 
+;; 新增：加载整个文件
+(defun scheme-load-file-split-window ()
+  (interactive)
+  (scheme-split-window)
+  (scheme-load-file (buffer-file-name)))
+
+
 ;; 主hook配置
 (add-hook 'scheme-mode-hook
   (lambda ()
@@ -57,9 +65,10 @@
     
     ;; 快捷键
     (define-key scheme-mode-map (kbd "<f5>") 'scheme-send-last-sexp-split-window)
-    (define-key scheme-mode-map (kbd "<f6>") 'scheme-send-definition-split-window)
-    
-    ;; 可选：启动REPL的快捷键
+	(define-key scheme-mode-map (kbd "<f6>") 'scheme-send-last-sexp-split-window)
+    (define-key scheme-mode-map (kbd "<f7>") 'scheme-load-file-split-window)
+	
+    ;; 可：启动REPL的快捷键
     (define-key scheme-mode-map (kbd "C-c C-z") 'run-scheme-guile)))
 
 ;; 文件关联

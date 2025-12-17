@@ -182,9 +182,34 @@
 (global-set-key (kbd "<M-up>") 'my-move-line-up)
 (global-set-key (kbd "<M-down>") 'my-move-line-down)
 
+;; 删除所有buffer
+(defun kill-other-buffers ()
+  "Kill all other buffers, leaving only the current one."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
+;; 删除所有buffer和历史buffer
+(defun kill-other-buffers-and-history ()
+  "Kill all other buffers and clear switch history, leaving only the current one."
+  (interactive)
+  ;; 1. 杀死其他所有缓冲区
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
+  ;; 2. 根据模式清除历史记录（可多选）
+  ;; 清除内置历史记录
+  (setq buffer-name-history '())
+  (setq file-name-history '())
+  ;; 如果是ido模式，也清除其虚拟缓冲区
+  (when (boundp 'ido-virtual-buffers)
+    (setq ido-virtual-buffers '()))
+  ;; 清除recentf列表（如果启用）
+  (when (boundp 'recentf-list)
+    (setq recentf-list '()))
+  (message "All other buffers killed and history cleared."))
+
 
 (provide 'init-utils)
 ;;; init-utils.el ends here
+
 
 
 
