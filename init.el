@@ -35,8 +35,9 @@
 (require 'init-themes)
 (require 'init-font)
 
+
 ;;auto-save
-(require 'init-auto-save)
+;(require 'init-auto-save)
 
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
@@ -569,6 +570,13 @@ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cu
 ;;   (interactive)
 ;;   (dired "/ssh:pavin@172.16.172.133:/home/pavin/Code/"))
 ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+
+
+
+
+
+;;my vscode style
+(require 'init-vscode-style)
 
 (provide 'init)
 

@@ -206,6 +206,41 @@
     (setq recentf-list '()))
   (message "All other buffers killed and history cleared."))
 
+(setq-default cursor-type '(bar . 5))
+
+;;关闭自动保存
+(setq make-backup-files nil)
+
+;;打开最近文件
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-item 10)
+
+;;高亮一行
+(global-hl-line-mode 1)
+
+;; 关闭菜单栏、工具栏、滚动条
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;;防止鼠标误操作
+;;; 启用 disable-mouse-mode 以忽略所有鼠标/触控板事件
+(define-minor-mode disable-mouse-mode
+  "A minor-mode that disables all mouse keybinds."
+  :global t
+  :lighter " 🐭"
+  :keymap (make-sparse-keymap))
+
+(dolist (type '(mouse down-mouse drag-mouse
+                      double-mouse triple-mouse))
+  (dolist (prefix '("" C- M- S- M-S- C-M- C-S- C-M-S-))
+    (dotimes (n 7)
+      (let ((k (format "%s%s-%s" prefix type n)))
+        (define-key disable-mouse-mode-map
+          (vector (intern k)) #'ignore)))))
+(disable-mouse-mode 1)
+
 
 (provide 'init-utils)
 ;;; init-utils.el ends here

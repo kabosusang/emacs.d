@@ -30,8 +30,8 @@
   :hook
   ((c-mode c++-mode) . (lambda ()
 			 ;; 启用modern C++ highlighting
-                         (c-toggle-auto-newline 1)
-                         (c-toggle-hungry-state 1)
+                         (c-toggle-auto-newline -1)
+                         (c-toggle-hungry-state -1)
                          ;; ========== 关键修复 ==========
                          ;; 禁用所有自动缩进和格式化
                          (setq-local c-electric-flag nil)      ; 禁用自动缩进
