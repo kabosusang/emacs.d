@@ -150,6 +150,7 @@
 (use-package tiny ; m1\n10|int func%02d ()
   :ensure t)
 
+
 (use-package company
  :ensure t
  :init (global-company-mode)
@@ -165,7 +166,8 @@
 (use-package company-box
   :ensure t
   :if window-system
-  :hook (company-mode . company-box-mode))
+:hook (company-mode . company-box-mode))
+
 
 (use-package codeium
   :disabled
@@ -193,7 +195,7 @@
   :defer t
   :config
   (setq use-dialog-box t) ;; do not use popup boxes
-
+  
   ;; if you don't want to use customize to save the api-key
   ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
 
@@ -202,7 +204,7 @@
         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
   (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
   ;; alternatively for a more extensive mode-line
-  ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+  ;;(add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
 
   ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
   (setq codeium-api-enabled
@@ -235,9 +237,11 @@
   ;; :init (global-flycheck-mode)
   :config
   (setq truncate-lines nil)
+  (setq flycheck-display-errors-function nil) ; 添加这行，禁用弹窗
+  
   :hook
   (prog-mode . flycheck-mode)
-  (c++-mode-hook . (lambda () (setq flycheck-clang-language-standard "c++17"))))
+  (c++-mode-hook . (lambda () (setq flycheck-clang-language-standard "c++23"))))
 
 (use-package flycheck-clang-tidy
   :ensure t
@@ -325,7 +329,11 @@
   :config
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (setq lsp-ui-doc-position 'top))
+  ;; 关键：确保这两行都存在且生效
+  (setq lsp-ui-doc-enable nil)   ; 禁用文档弹窗
+  (setq lsp-ui-sideline-enable nil)) ; 强烈建议同时禁用侧边栏诊断信息，它也可能干扰
+
+  ;(setq lsp-ui-doc-position 'top))
 
 (use-package lsp-ivy
   :ensure t

@@ -225,7 +225,7 @@
 (scroll-bar-mode -1)
 
 ;;防止鼠标误操作
-;;; 启用 disable-mouse-mode 以忽略所有鼠标/触控板事件
+;;启用 disable-mouse-mode 以忽略所有鼠标/触控板事件
 (define-minor-mode disable-mouse-mode
   "A minor-mode that disables all mouse keybinds."
   :global t
@@ -242,8 +242,10 @@
 (disable-mouse-mode 1)
 
 
+
 (provide 'init-utils)
 ;;; init-utils.el ends here
+
 
 
 
