@@ -330,10 +330,9 @@
   (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
   ;; 关键：确保这两行都存在且生效
-  (setq lsp-ui-doc-enable nil)   ; 禁用文档弹窗
-  (setq lsp-ui-sideline-enable nil)) ; 强烈建议同时禁用侧边栏诊断信息，它也可能干扰
-
-  ;(setq lsp-ui-doc-position 'top))
+  ;(setq lsp-ui-doc-enable nil)   ; 禁用文档弹窗
+  ;(setq lsp-ui-sideline-enable nil)) ; 强烈建议同时禁用侧边栏诊断信息，它也可能干扰
+  (setq lsp-ui-doc-position 'top))
 
 (use-package lsp-ivy
   :ensure t

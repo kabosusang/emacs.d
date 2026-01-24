@@ -15,8 +15,12 @@
   "Override the major mode NAME in this buffer."
   (setq-local mode-name name))
 
-(defun sanityinc/major-mode-lighter (mode name)
-  (add-hook (derived-mode-hook-name mode)
+;; (defun sanityinc/major-mode-lighter (mode name)
+;;   (add-hook (derived-mode-hook-name mode)
+;;             (apply-partially 'sanityinc/set-major-mode-name name)))
+
+(defun sanityinc/major-mode-lighter (mode name)             
+  (add-hook (intern (concat (symbol-name mode) "-hook"))                   
             (apply-partially 'sanityinc/set-major-mode-name name)))
 
 ;; String utilities missing from core emacs
@@ -208,8 +212,14 @@
 
 (setq-default cursor-type '(bar . 5))
 
-;;关闭自动保存
+;; 关闭备份文件（以 ~ 结尾的文件）
 (setq make-backup-files nil)
+
+;; 关闭自动保存文件（带 @ 和时间戳的文件）
+(setq auto-save-default nil)
+
+;; 关闭锁文件（以 .# 开头的文件）
+(setq create-lockfiles nil)
 
 ;;打开最近文件
 (require 'recentf)
