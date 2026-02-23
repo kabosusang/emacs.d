@@ -12,13 +12,13 @@
  '(ivy-mode t)
  '(package-selected-packages
    '(all-the-icons-nerd-fonts amx cargo clang-format cmake-mode
-							  company-box counsel-projectile dap-mode
-							  dashboard doom-themes embark
-							  exec-path-from-shell flycheck-clang-tidy
-							  helpful highlight-symbol lsp-ivy
-							  lsp-pyright lsp-ui magit marginalia
-							  multiple-cursors mwim pyvenv
-							  rainbow-delimiters rust-mode
+							  company-anaconda company-box company-flx
+							  counsel-projectile dap-mode dashboard
+							  doom-themes embark exec-path-from-shell
+							  flycheck-clang-tidy helpful
+							  highlight-symbol lsp-ivy lsp-pyright
+							  lsp-ui magit marginalia multiple-cursors
+							  mwim pyvenv rainbow-delimiters rust-mode
 							  smart-mode-line tiny treemacs-projectile
 							  undo-tree use-package-hydra yaml-mode
 							  yasnippet-snippets))

@@ -183,6 +183,15 @@
         ("C-c f" . rust-format-buffer)
         ("C-c C-f" . rust-format-buffer))
   :config
+  ;; 启用LSP的保存时格式化
+  (add-hook 'lsp-mode-hook
+            (lambda ()
+              (when (derived-mode-p 'rust-mode)
+                ;; 启用保存时格式化
+                (setq lsp-enable-on-type-formatting nil)  ; 禁用输入时格式化
+                (add-hook 'before-save-hook #'lsp-format-buffer nil t))))
+
+  
   ;; debug
   (require 'dap-gdb-lldb)
   (dap-register-debug-template "Rust::LLDB Run Configuration"

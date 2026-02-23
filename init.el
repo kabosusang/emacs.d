@@ -152,15 +152,50 @@
 
 
 (use-package company
- :ensure t
- :init (global-company-mode)
- :config
- (setq company-minimum-prefix-length 1) ; 只需敲 1 个字母就开始进行自动补全
- (setq company-tooltip-align-annotations t)
-   (setq company-idle-delay 0.0)
- (setq company-show-numbers t) ;; 给选项编号 (按快捷键 M-1、M-2 等等来进行选择).
- (setq company-selection-wrap-around t)
- (setq company-transformers '(company-sort-by-occurrence))) ; 根据选择的频率进行排序，读者如果不喜欢可以去掉
+  :ensure t
+  :init (global-company-mode)
+  :config
+  ;; 基本设置
+  (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-align-annotations t)
+  (setq company-idle-delay 0.0)
+  (setq company-show-numbers t)
+  (setq company-selection-wrap-around t)
+  (setq company-transformers '(company-sort-by-occurrence))
+  
+  ;; ========== 关键：添加大小写不敏感设置 ==========
+  ;; 1. 设置 dabbrev backend 不区分大小写
+  (setq company-dabbrev-ignore-case 'keep-prefix)  ; 'keep-prefix 或 t
+  (setq company-dabbrev-downcase nil)
+  
+  ;; 2. 设置搜索函数为 flex（支持模糊匹配）
+  ;; (setq company-search-regexp-function 'company-flex-search-regexp)
+  
+  ;; 3. 设置 backend 列表，确保使用正确的配置
+  (setq company-backends
+        '((company-capf
+           company-dabbrev-code
+           company-keywords
+           company-files
+           :with
+           company-yasnippet)
+          (company-dabbrev
+           :separate t
+           :ignore-case t))))  ; 这里也要设置 :ignore-case t
+
+;; 添加模糊匹配搜索
+;; 首先安装 flx 包
+(use-package flx
+  :ensure t)
+
+(use-package company-flx
+  :ensure t
+  :after company
+  :config
+  (company-flx-mode +1)
+  ;; 可选：配置 flx 的参数
+  (setq company-flx-limit 1000)    ; 最大匹配数量
+  (setq company-flx-threshold 3))  ; 最小匹配分数
 
 
 (use-package company-box
@@ -316,6 +351,7 @@
          ("<f12>" . lsp-find-definition)
          ;; M-左方向键 返回之前位置
          ("M-<left>" . xref-pop-marker-stack)
+		 ("M-<right>" . xref-go-forward)
          ;; 可选：其他有用的绑定
          ("M-?" . lsp-find-references) ; 查找引用
          ("C-c C-d" . lsp-describe-thing-at-point))) ; 查看文档

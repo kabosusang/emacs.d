@@ -236,22 +236,30 @@
 
 ;;防止鼠标误操作
 ;;启用 disable-mouse-mode 以忽略所有鼠标/触控板事件
-(define-minor-mode disable-mouse-mode
-  "A minor-mode that disables all mouse keybinds."
-  :global t
-  :lighter " 🐭"
-  :keymap (make-sparse-keymap))
+;; (define-minor-mode disable-mouse-mode
+;;   "A minor-mode that disables all mouse keybinds."
+;;   :global t
+;;   :lighter " 🐭"
+;;   :keymap (make-sparse-keymap))
 
-(dolist (type '(mouse down-mouse drag-mouse
-                      double-mouse triple-mouse))
-  (dolist (prefix '("" C- M- S- M-S- C-M- C-S- C-M-S-))
-    (dotimes (n 7)
-      (let ((k (format "%s%s-%s" prefix type n)))
-        (define-key disable-mouse-mode-map
-          (vector (intern k)) #'ignore)))))
-(disable-mouse-mode 1)
+;; (dolist (type '(mouse down-mouse drag-mouse
+;;                       double-mouse triple-mouse))
+;;   (dolist (prefix '("" C- M- S- M-S- C-M- C-S- C-M-S-))
+;;     (dotimes (n 7)
+;;       (let ((k (format "%s%s-%s" prefix type n)))
+;;         (define-key disable-mouse-mode-map
+;;           (vector (intern k)) #'ignore)))))
+;; (disable-mouse-mode 1)
 
+;; 打开配置文件
+(defun open-init-file()
+  (interactive)
+  (find-file user-init-file))
+(global-set-key (kbd "<f2>") 'open-init-file)
 
+;;让鼠标滚动更好用
+(setq mouse-wheel-scroll-amount ' (1 ((shift) . 1) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
 
 (provide 'init-utils)
 ;;; init-utils.el ends here
