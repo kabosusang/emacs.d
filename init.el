@@ -540,7 +540,8 @@ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cu
 ;(require 'init-org)
 ;;scheme
 (require 'init-programming-scheme)
-
+;;python
+(require 'init-programming-python)
 
 
 
