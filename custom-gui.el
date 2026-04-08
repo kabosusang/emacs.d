@@ -14,14 +14,22 @@
    '(all-the-icons-nerd-fonts amx cargo clang-format cmake-mode
 							  company-anaconda company-box company-flx
 							  counsel-projectile dap-mode dashboard
-							  doom-themes embark exec-path-from-shell
-							  flycheck-clang-tidy helpful
-							  highlight-symbol lsp-ivy lsp-pyright
-							  lsp-ui magit marginalia multiple-cursors
-							  mwim pyvenv rainbow-delimiters rust-mode
-							  smart-mode-line tiny treemacs-projectile
-							  undo-tree use-package-hydra yaml-mode
+							  doom-themes eat embark
+							  exec-path-from-shell flycheck-clang-tidy
+							  geiser-guile helpful highlight-symbol
+							  inheritenv lsp-ivy lsp-pyright lsp-ui
+							  magit marginalia multiple-cursors mwim
+							  paredit poetry pyimport
+							  rainbow-delimiters rust-mode
+							  smart-mode-line tablist tiny
+							  treemacs-all-the-icons
+							  treemacs-nerd-icons treemacs-projectile
+							  undo-tree use-package-hydra vterm
+							  weather-scout yaml-mode
 							  yasnippet-snippets))
+ '(package-vc-selected-packages
+   '((vterm :url "https://github.com/akermu/emacs-libvterm.git" :lisp-dir
+			"elisp")))
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((TeX-master quote dwim)

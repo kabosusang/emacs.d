@@ -26,7 +26,7 @@
 ;; Bootstrap config
 (require 'init-utils)
 (require 'init-site-lisp) ;; Must come before elpa, as it may provide package.el
-;; Calls (package-initialize)
+
 (require 'init-elpa)      ;; Machinery for installing required packages
 ;; (setq package-native-compile t)
 
@@ -542,6 +542,8 @@ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cu
 (require 'init-programming-scheme)
 ;;python
 (require 'init-programming-python)
+;;claude-code
+(require 'init-claude-code)
 
 
 

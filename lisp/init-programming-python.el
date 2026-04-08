@@ -1,5 +1,4 @@
 ;;; init-programming-python.el --- Python Config
-;; -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 ;; Python 配置 (使用 uv + lsp-pyright)

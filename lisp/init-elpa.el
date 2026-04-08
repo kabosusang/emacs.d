@@ -20,8 +20,9 @@
 ;; (setq package-archives '(("gnu-mir"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")
 ;;                          ("melpa-mir" . "http://mirrors.cloud.tencent.com/elpa/melpa/")))
 (add-to-list 'package-archives '("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/") t)
-(add-to-list 'package-archives '( "melpa" . "https://melpa.org/packages/") t)
+;; (add-to-list 'package-archives '( "melpa" . "https://melpa.org/packages/") t)
 ;; (add-to-list 'package-archives '( "melpa_tsinghua" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t)
+(add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t)
 ;; (add-to-list 'package-archives
 ;;              '("MELPA Stable" . "https://stable.melpa.org/packages/") t)
 ;; (add-to-list 'package-archives
