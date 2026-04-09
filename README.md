@@ -6,6 +6,7 @@ Forked from [Pavinberg/emacs.d](https://github.com/Pavinberg/emacs.d)
 
 使用 `lsp-bridge` 提供极速流畅的代码补全体验，并集成了 `claude-code` AI 辅助编程。
 
+
 ## 特性
 
 - ⚡ **lsp-bridge**：异步 LSP 补全，丝般顺滑
@@ -46,3 +47,4 @@ M-x package-install vterm
 
 ## ScreenShot
 ![](screenshot/book.png)
+
