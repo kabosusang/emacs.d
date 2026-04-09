@@ -5,28 +5,13 @@
  ;; If there is more than one, they won't work right.
  '(codeium/metadata/api_key "2d487642-54f2-4cfa-936d-ed07baec760b")
  '(custom-safe-themes
-   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+   '("f1e8339b04aef8f145dd4782d03499d9d716fdc0361319411ac2efc603249326"
+	 "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
 	 "14850c68376012a083ed7ec9d36179962b165cd8f7536f021ee3b6f5cb68aa3c"
 	 "3a2f8087795a6a06d5a57cec6569dbbb98211f86ae3ad9ce931a5a3340b32569"
 	 default))
  '(ivy-mode t)
- '(package-selected-packages
-   '(all-the-icons-nerd-fonts amx cargo clang-format cmake-mode
-							  company-anaconda company-box company-flx
-							  counsel-projectile dap-mode dashboard
-							  doom-themes eat embark
-							  exec-path-from-shell flycheck-clang-tidy
-							  geiser-guile helpful highlight-symbol
-							  inheritenv lsp-ivy lsp-pyright lsp-ui
-							  magit marginalia multiple-cursors mwim
-							  paredit poetry pyimport
-							  rainbow-delimiters rust-mode
-							  smart-mode-line tablist tiny
-							  treemacs-all-the-icons
-							  treemacs-nerd-icons treemacs-projectile
-							  undo-tree use-package-hydra vterm
-							  weather-scout yaml-mode
-							  yasnippet-snippets))
+ '(package-selected-packages nil)
  '(package-vc-selected-packages
    '((vterm :url "https://github.com/akermu/emacs-libvterm.git" :lisp-dir
 			"elisp")))

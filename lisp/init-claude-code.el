@@ -14,9 +14,9 @@
 (require 'claude-code)
 
 ;; 确保 eat 已安装
-(unless (package-installed-p 'eat)
-  (package-refresh-contents)
-  (package-install 'eat))
+;; (unless (package-installed-p 'eat)
+;;   (package-refresh-contents)
+;;   (package-install 'eat))
 
 (setq claude-code-program "~/.bun/bin/ccb")
 (setq claude-code-terminal-backend 'vterm)  ; vterm 比 eat 更稳定快速

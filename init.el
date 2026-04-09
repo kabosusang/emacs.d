@@ -6,7 +6,15 @@
 ;;; Code:
 ;; (setq debug-on-error t)
 
-(let ((minver "25.1"))
+;; 设置 Python 虚拟环境路径
+(let ((venv-path (expand-file-name "~/.emacs.d/.venv-emacs")))
+  (when (file-exists-p venv-path)
+    (setenv "PATH" (concat venv-path "/bin:" (getenv "PATH")))
+    (setq exec-path (cons (concat venv-path "/bin") exec-path))
+    (setq eaf-python-command (concat venv-path "/bin/python"))))
+
+
+(let ((minver "29.1"))
   (when (version< emacs-version minver)
 	(error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
@@ -81,10 +89,11 @@
    ("C-c v" . 'ivy-push-view)
    ("C-c s" . 'ivy-switch-view)
    ("C-c V" . 'ivy-pop-view)
-   ("C-x C-@" . 'counsel-mark-ring); 在某些终端上 C-x C-SPC 会被映射为 C-x C-@，比如在 macOS 上，所以要手动设置
-   ("C-x C-SPC" . 'counsel-mark-ring)
-   :map minibuffer-local-map
-   ("C-r" . counsel-minibuffer-history)))
+   ("C-x C-@" . 'counsel-mark-ring)
+   ("C-x C-SPC" . 'counsel-mark-ring))
+ :bind
+ (:map minibuffer-local-map
+        ("C-r" . counsel-minibuffer-history)))
 
 (use-package amx
   :ensure t
@@ -127,8 +136,7 @@
 (use-package marginalia
   :ensure t
   :init (marginalia-mode)
-  :bind (:map minibuffer-local-map
-			  ("M-A" . marginalia-cycle)))
+  :bind (("M-A" . marginalia-cycle)))
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -181,7 +189,8 @@
            company-yasnippet)
           (company-dabbrev
            :separate t
-           :ignore-case t))))  ; 这里也要设置 :ignore-case t
+           :ignore-case t)))  ; 这里也要设置 :ignore-case t
+  )
 
 ;; 添加模糊匹配搜索
 ;; 首先安装 flx 包
@@ -304,8 +313,12 @@
   :config
   (setq projectile-mode-line "Projectile")
   (setq projectile-track-known-projects-automatically nil)
-  (defadvice projectile-project-root (around ignore-remote first activate)
-	(unless (file-remote-p default-directory) ad-do-it)))
+  (advice-add 'projectile-project-root :around #'my/projectile-project-root-ignore-remote))
+
+(defun my/projectile-project-root-ignore-remote (orig-fun &rest args)
+  "Ignore remote directories for projectile-project-root."
+  (unless (file-remote-p default-directory)
+    (apply orig-fun args)))
 
 (use-package counsel-projectile
   :ensure t
@@ -319,120 +332,8 @@
   :ensure t
   :defer t)
 
-(defun enable-lsp-if-not-remote ()
-  (unless (file-remote-p default-directory) (lsp-deferred)))
-
-
-;; lsp-mode
-(use-package lsp-mode
-  :ensure t
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l"
-        lsp-file-watch-threshold 500)
-  :hook
-  ;; 为 C、Python、C++、Rust 自动开启 LSP
-  ((c-mode          . lsp-deferred)
-   (python-mode     . lsp-deferred)
-   (c++-mode        . lsp-deferred)
-   (rust-mode       . lsp-deferred)
-   ;; 可以根据需要添加其他语言，如：
-   ;; (go-mode         . lsp-deferred)
-   ;; (js-mode         . lsp-deferred)
-   (lsp-mode . lsp-enable-which-key-integration)) ; which-key integration
-  :commands (lsp lsp-deferred)
-  :config
-  (setq lsp-completion-provider :none)
-  (setq lsp-headerline-breadcrumb-enable t)
-  ;; (add-to-list 'lsp-clients-clangd-args "--clang-tidy")
-  ;; 自定义按键绑定
-  :bind (:map lsp-mode-map
-         ;; F12 跳转到定义
-         ("<f12>" . lsp-find-definition)
-         ;; M-左方向键 返回之前位置
-         ("M-<left>" . xref-pop-marker-stack)
-		 ("M-<right>" . xref-go-forward)
-         ;; 可选：其他有用的绑定
-         ("M-?" . lsp-find-references) ; 查找引用
-         ("C-c C-d" . lsp-describe-thing-at-point))) ; 查看文档
-
-;; 原来的这个绑定可以保留（如果你需要的话）
-(use-package lsp-mode
-  :bind ("C-c l s" . lsp-ivy-workspace-symbol))
-
-(use-package lsp-ui
-  :ensure t
-  :config
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  ;; 关键：确保这两行都存在且生效
-  ;(setq lsp-ui-doc-enable nil)   ; 禁用文档弹窗
-  ;(setq lsp-ui-sideline-enable nil)) ; 强烈建议同时禁用侧边栏诊断信息，它也可能干扰
-  (setq lsp-ui-doc-position 'top))
-
-(use-package lsp-ivy
-  :ensure t
-  :after (lsp-mode))
-
-
-(use-package dap-mode
-  :ensure t
-  :after lsp-mode
-  :init (add-to-list 'image-types 'svg)
-  :commands dap-debug
-  :custom
-  (dap-auto-configure-mode t)
-  :hydra
-  (dap-hydra
-   (:color pink :hint nil :foreign-keys run)
-   "
-^Stepping^          ^Switch^                 ^Breakpoints^         ^Debug^                     ^Eval^                      
-^^^^^^^^---------------------------------------------------------------------------------------------------------------
-_n_: Next           _ss_: Session            _bb_: Toggle          _dd_: Debug                 _ee_: Eval                  
-_i_: Step in        _st_: Thread             _bd_: Delete          _dr_: Debug recent          _er_: Eval region
-_o_: Step out       _sf_: Stack frame        _ba_: Add             _dl_: Debug last            _es_: Eval thing at point
-_c_: Continue       _su_: Up stack frame     _bc_: Set condition   _de_: Edit debug template   _ea_: Add expression.
-_r_: Restart frame  _sd_: Down stack frame   _bh_: Set hit count   _ds_: Debug restart
-_Q_: Disconnect     _sl_: List locals        _bl_: Set log message
-                  _sb_: List breakpoints
-                  _se_: List expressions
-"
-   ("n" dap-next)
-   ("i" dap-step-in)
-   ("o" dap-step-out)
-   ("c" dap-continue)
-   ("r" dap-restart-frame)
-   ("ss" dap-switch-session)
-   ("st" dap-switch-thread)
-   ("sf" dap-switch-stack-frame)
-   ("su" dap-up-stack-frame)
-   ("sd" dap-down-stack-frame)
-   ("sl" dap-ui-locals)
-   ("sb" dap-ui-breakpoints)
-   ("se" dap-ui-expressions)
-   ("bb" dap-breakpoint-toggle)
-   ("ba" dap-breakpoint-add)
-   ("bd" dap-breakpoint-delete)
-   ("bc" dap-breakpoint-condition)
-   ("bh" dap-breakpoint-hit-condition)
-   ("bl" dap-breakpoint-log-message)
-   ("dd" dap-debug)
-   ("dr" dap-debug-recent)
-   ("ds" dap-debug-restart)
-   ("dl" dap-debug-last)
-   ("de" dap-debug-edit-template)
-   ("ee" dap-eval)
-   ("ea" dap-ui-expressions-add)
-   ("er" dap-eval-region)
-   ("es" dap-eval-thing-at-point)
-   ("q" nil "quit" :color blue)
-   ("Q" dap-disconnect "Disconnect" :color blue))
-  :config
-  (dap-ui-mode 1)
-  (defun dap-hydra ()
-	(interactive)
-	"Run `dap-hydra/body'."
-	(dap-hydra/body)))
+;; lsp-bridge
+(require 'init-lsp-bridge)
 
 (use-package treemacs
   :ensure t
@@ -455,6 +356,7 @@ _Q_: Disconnect     _sl_: List locals        _bl_: Set log message
   :after (treemacs projectile))
 
 (use-package lsp-treemacs
+  :disabled
   :ensure t
   :after (treemacs lsp))
 
@@ -467,6 +369,8 @@ _Q_: Disconnect     _sl_: List locals        _bl_: Set log message
   ;; (yas-global-mode)
   :hook
   (prog-mode . yas-minor-mode)
+  :bind
+  (:map yas-minor-mode-map ("S-<tab>" . yas-expand))
   :config
   (yas-reload-all)
   (defun company-mode/backend-with-yas (backend)
@@ -475,12 +379,13 @@ _Q_: Disconnect     _sl_: List locals        _bl_: Set log message
       (append (if (consp backend) backend (list backend))
               '(:with company-yasnippet))))
   (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
+
+  
   ;; unbind <TAB> completion
   (define-key yas-minor-mode-map [(tab)]        nil)
   (define-key yas-minor-mode-map (kbd "TAB")    nil)
-  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
-  :bind
-  (:map yas-minor-mode-map ("S-<tab>" . yas-expand)))
+  (define-key yas-minor-mode-map (kbd "<tab>")  nil))
 
 (use-package yasnippet-snippets
   :ensure t

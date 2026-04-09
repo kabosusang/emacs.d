@@ -222,9 +222,9 @@
 (setq create-lockfiles nil)
 
 ;;打开最近文件
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-item 10)
+;; (require 'recentf)
+;; (recentf-mode 1)
+;; (setq recentf-max-menu-item 10)
 
 ;;高亮一行
 (global-hl-line-mode 1)

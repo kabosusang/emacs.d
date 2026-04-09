@@ -34,3 +34,9 @@ auto-save-list/
 
 
 
+.venv-emacs/
+*.elc                      # 编译后的 elisp 文件（建议加上）
+
+
+
+

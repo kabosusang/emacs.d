@@ -4,26 +4,26 @@
 ;;; Code:
 
 
-;; 3. lsp-mode配置
-(use-package lsp-mode
-  :ensure t
-  :custom
-  ;; clangd配置
-  (lsp-clients-clangd-executable "clangd")
-  (lsp-clients-clangd-args '("--background-index"
-                             "--clang-tidy"
-                             "--completion-style=detailed"
-                             "--header-insertion=iwyu"
-                             "--header-insertion-decorators"
-                             "--cross-file-rename"
-                             "--completion-parse=auto"))
-  ;; 性能优化
-  (lsp-idle-delay 0.5)
-  (lsp-log-io nil) ; 设置为t可以调试，但会影响性能
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :hook
-  ((c-mode c++-mode) . lsp-deferred))
+;; 3. lsp-mode配置 - 已禁用，使用 lsp-bridge 替代
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :custom
+;;   ;; clangd配置
+;;   (lsp-clients-clangd-executable "clangd")
+;;   (lsp-clients-clangd-args '("--background-index"
+;;                              "--clang-tidy"
+;;                              "--completion-style=detailed"
+;;                              "--header-insertion=iwyu"
+;;                              "--header-insertion-decorators"
+;;                              "--cross-file-rename"
+;;                              "--completion-parse=auto"))
+;;   ;; 性能优化
+;;   (lsp-idle-delay 0.5)
+;;   (lsp-log-io nil) ; 设置为t可以调试，但会影响性能
+;;   :init
+;;   (setq lsp-keymap-prefix "C-c l")
+;;   :hook
+;;   ((c-mode c++-mode) . lsp-deferred))
 
 ;; 4. C/C++配置 - 禁用自动格式化
 (use-package c++-mode
@@ -149,40 +149,51 @@
      (lambda () (read-file-name "Select file to debug: ")))))
 
 ;; 10. Python配置
+;; 禁用 dap-python 的默认配置
 (use-package python
   :defer t
   :mode ("\\.py\\'" . python-mode)
-  :interpreter ("~/miniconda3/bin/python3" . python-mode)
+  :interpreter ("python" . python-mode)
   :config
-  ;; for debug
-  (require 'dap-python))
+  ;; 禁用 dap-python 依赖，因为可能干扰 lsp-bridge
+  ;; (require 'dap-python)
+  )
 
 (use-package pyvenv
   :ensure t
   :config
-  (setenv "WORKON_HOME" (expand-file-name "~/miniconda3/envs"))
+  ;;(setenv "WORKON_HOME" (expand-file-name "~/miniconda3/envs"))
   (pyvenv-mode t)
   :hook
   (python-mode . (lambda () (pyvenv-workon ".."))))
 
-(use-package lsp-pyright
-  :ensure t
-  :hook
-  (python-mode . (lambda ()
-                   (require 'lsp-pyright)
-                   (lsp-deferred))))
+;; 禁用 lsp-pyright，使用 lsp-bridge 替代
+;; (use-package lsp-pyright
+;;   :ensure t
+;;   :hook
+;;   (python-mode . (lambda ()
+;;                    (require 'lsp-pyright)
+;;                    (lsp-deferred))))
 
 ;; 11. Rust配置
+;; 禁用 lsp-deferred，使用 lsp-bridge 替代
 (use-package rust-mode
   :ensure t
   :functions dap-register-debug-template
+  ;; :hook 已禁用，改为手动启用
   :hook
-  (rust-mode . lsp-deferred)
+  ((rust-mode . my/rust-mode-setup))
   :bind
   (:map rust-mode-map
         ("C-c f" . rust-format-buffer)
         ("C-c C-f" . rust-format-buffer))
   :config
+
+;; Rust mode setup function
+(defun my/rust-mode-setup ()
+  "Setup for rust-mode"
+  ;; 其他 rust-mode 设置可以在这里添加
+  (message "Rust mode setup"))
   ;; 启用LSP的保存时格式化
   (add-hook 'lsp-mode-hook
             (lambda ()
