@@ -4,7 +4,9 @@ Forked from [Pavinberg/emacs.d](https://github.com/Pavinberg/emacs.d)
 
 一套为 Python/Rust/C++ 开发优化的 Emacs 配置。  
 
-使用 `lsp-bridge` 提供极速流畅的代码补全体验，并集成了 `claude-code` AI 辅助编程。
+使用 `lsp-bridge` 提供极速流畅的代码补全体验，并集成了 `claude-code` AI 辅助编程。  
+
+如果要使用`lsp-mode` 移步[lsp-mode](https://github.com/kabosusang/emacs.d/tree/main)
 
 
 ## 特性
