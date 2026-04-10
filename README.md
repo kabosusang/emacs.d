@@ -39,7 +39,31 @@ uv pip install --python ~/.emacs.d/.venv-emacs/bin/python pyright ruff
 uv pip install --python ~/.emacs.d/.venv-emacs/bin/python epc orjson rapidfuzz watchdog six packaging
 ```
 ### Python依赖如下
-![](screenshot/venv.png)
+```baseh
+╰─λ uv pip list --python ~/.emacs.d/.venv-emacs/bin/python                                         2 (0.006s) < 22:31:45
+Using Python 3.11.15 environment at: /home/kabosu/.emacs.d/.venv-emacs
+Package               Version
+--------------------- -------
+bcrypt                5.0.0
+cffi                  2.0.0
+cryptography          46.0.7
+epc                   0.0.5
+invoke                3.0.3
+nodeenv               1.10.0
+nodejs-wheel-binaries 24.14.1
+orjson                3.11.8
+paramiko              4.0.0
+pycparser             3.0
+pynacl                1.6.2
+pyright               1.1.408
+rapidfuzz             3.14.5
+ruff                  0.15.10
+setuptools            82.0.1
+sexpdata              1.0.2
+six                   1.17.0
+typing-extensions     4.15.0
+watchdog              6.0.0
+```
 
 ## 启动
 首次启动`emacs`可能需要安装
