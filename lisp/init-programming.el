@@ -249,5 +249,34 @@
 ;; 绑定修复函数到快捷键
 (global-set-key (kbd "C-c F") 'my/disable-all-auto-formatting)
 
+;; lsp-bridge 优化配置 - 清理版本
+
+;; 调试（测试完记得关闭）
+;;(setq lsp-bridge-enable-log t)
+;;(setq lsp-bridge-enable-debug t)
+
+;; 补全延迟和频率控制
+(setq lsp-bridge-completion-delay 0.2)           ; 输入后等待 0.2 秒
+(setq lsp-bridge-completion-min-interval 0.15)   ; 最小间隔 150ms
+
+;; 补全功能开关
+(setq lsp-bridge-enable-auto-completion t)       ; 启用自动补全
+(setq lsp-bridge-enable-completion-popup t)      ; 启用弹窗
+(setq lsp-bridge-enable-semantic-completion t)   ; 启用语义补全
+(setq lsp-bridge-enable-snippet t)               ; 启用代码片段
+
+;; 性能优化 - 限制补全数量
+(setq lsp-bridge-completion-max-items 50)        ; 最多 50 个补全项
+
+;; 诊断优化 - 延迟处理
+(setq lsp-bridge-enable-diagnostics 'defer)      ; 延迟诊断（字符串符号）
+(setq lsp-bridge-diagnostics-delay 0.5)          ; 延迟 0.5 秒
+
+;; 禁用不必要的功能（提升速度）
+;;(setq lsp-bridge-enable-hover-diagnostic nil)    ; 禁用悬停诊断
+;;(setq lsp-bridge-enable-search-words nil)        ; 禁用单词搜索
+
+
+
 (provide 'init-programming)
 ;;; init-programming.el ends here

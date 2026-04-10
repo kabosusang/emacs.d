@@ -33,7 +33,7 @@ LSP 服务器和 lsp-bridge 依赖需要安装在专用的虚拟环境中：
 uv venv ~/.emacs.d/.venv-emacs --python 3.11
 
 # 安装 LSP Python服务器
-uv pip install --python ~/.emacs.d/.venv-emacs/bin/python basedpyright ruff
+uv pip install --python ~/.emacs.d/.venv-emacs/bin/python pyright ruff
 
 # 安装 lsp-bridge 依赖
 uv pip install --python ~/.emacs.d/.venv-emacs/bin/python epc orjson rapidfuzz watchdog six packaging
@@ -55,7 +55,7 @@ M-x package-install vterm
 如果要使用Python编程需要切换虚拟环境 比如项目目录有.venv虚拟环境 添加`lsp-bridge`的环境  
 之后执行`my/setup-uv-virtualenv` 切换虚拟环境 需要给项目安装`lsp-bridge`依赖
 ```base
-uv pip install --python .venv/bin/python basedpyright ruff
+uv pip install --python .venv/bin/python pyright ruff
 uv pip install --python .venv/bin/python epc orjson rapidfuzz watchdog six packaging 
 ```
 

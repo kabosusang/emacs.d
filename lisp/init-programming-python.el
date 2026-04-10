@@ -57,7 +57,7 @@
           ;; 设置 Python 解释器
           (setq-local python-shell-interpreter python-path)
           
-          ;; 关键：设置 basedpyright 使用的 Python
+          ;; 关键：设置 pyright 使用的 Python
           (setq-local lsp-bridge-python-command python-path)
           
           ;; 设置环境变量
@@ -78,7 +78,6 @@
           (message "对 已激活虚拟环境: %s" venv-path))))))
 
 
-
 ;; 快捷命令：使用 uv 运行当前脚本
 (defun my/python-run-uv ()
   "使用 uv run 执行当前 Python 文件"
@@ -94,6 +93,15 @@
 ;; 绑定快捷键
 (with-eval-after-load 'python
   (define-key python-mode-map (kbd "C-c C-c") 'my/python-run-uv))
+
+;; 配置 lsp-bridge 使用 pyright 而不是 basedpyright
+(setq lsp-bridge-python-lsp-server 'pyright)
+
+;; 可选：pyright 优化配置
+(setq lsp-bridge-get-completion-trigger-characters
+      '((python-mode . ("." "("))))
+
+
 
 
 (provide 'init-programming-python)
