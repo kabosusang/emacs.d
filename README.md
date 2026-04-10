@@ -36,7 +36,7 @@ uv venv ~/.emacs.d/.venv-emacs --python 3.11
 uv pip install --python ~/.emacs.d/.venv-emacs/bin/python basedpyright ruff
 
 # 安装 lsp-bridge 依赖
-uv pip install --python ~/.emacs.d/.venv-emacs/bin/python epc orjson rapidfuzz watchdog
+uv pip install --python ~/.emacs.d/.venv-emacs/bin/python epc orjson rapidfuzz watchdog six packaging
 ```
 ### Python依赖如下
 ![](screenshot/venv.png)
@@ -49,4 +49,13 @@ M-x package-install vterm
 
 ## ScreenShot
 ![](screenshot/book.png)
+
+
+## 注意  
+如果要使用Python编程需要切换虚拟环境 比如项目目录有.venv虚拟环境 添加`lsp-bridge`的环境  
+之后执行`my/setup-uv-virtualenv` 切换虚拟环境 需要给项目安装`lsp-bridge`依赖
+```base
+uv pip install --python .venv/bin/python basedpyright ruff
+uv pip install --python .venv/bin/python epc orjson rapidfuzz watchdog six packaging 
+```
 
