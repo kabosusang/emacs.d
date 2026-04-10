@@ -21,26 +21,63 @@
   (setq python-indent-offset 4))
 
 ;; 辅助函数：设置 uv 虚拟环境
+;; (defun my/setup-uv-virtualenv ()
+;;   "自动检测并激活 uv 管理的虚拟环境"
+;;   (interactive)
+;;   (let* ((project-root (or (locate-dominating-file default-directory ".git")
+;;                            (locate-dominating-file default-directory "pyproject.toml")
+;;                            (locate-dominating-file default-directory "requirements.txt")))
+;;          (venv-path (when project-root
+;;                       (expand-file-name ".venv" project-root))))
+;;     (when (and venv-path (file-exists-p venv-path))
+;;       (let ((python-path (expand-file-name "bin/python" venv-path)))
+;;         (when (file-exists-p python-path)
+;;           ;; 设置 Python 解释器路径
+;;           (setq-local python-shell-interpreter python-path)
+;;           ;; 设置环境变量 PATH，让 lsp-bridge 能找到正确的 Python
+;;           (setenv "PATH" (concat (expand-file-name "bin" venv-path) ":" (getenv "PATH")))
+;;           (setq-local exec-path (cons (expand-file-name "bin" venv-path) exec-path))
+;;           ;; 通知 lsp-bridge 环境变化
+;;           (when (fboundp 'lsp-bridge-reset)
+;;             (lsp-bridge-reset))
+;;           (message "已激活 uv 虚拟环境: %s" venv-path))))))
+
 (defun my/setup-uv-virtualenv ()
   "自动检测并激活 uv 管理的虚拟环境"
   (interactive)
-  (let* ((project-root (or (locate-dominating-file default-directory ".git")
-                           (locate-dominating-file default-directory "pyproject.toml")
-                           (locate-dominating-file default-directory "requirements.txt")))
+  ;; 优先找 pyproject.toml（和 uv 逻辑一致）
+  (let* ((project-root (or (locate-dominating-file default-directory "pyproject.toml")
+                           (locate-dominating-file default-directory "requirements.txt")
+                           (locate-dominating-file default-directory ".git")))
          (venv-path (when project-root
                       (expand-file-name ".venv" project-root))))
     (when (and venv-path (file-exists-p venv-path))
       (let ((python-path (expand-file-name "bin/python" venv-path)))
         (when (file-exists-p python-path)
-          ;; 设置 Python 解释器路径
+          ;; 设置 Python 解释器
           (setq-local python-shell-interpreter python-path)
-          ;; 设置环境变量 PATH，让 lsp-bridge 能找到正确的 Python
+          
+          ;; 关键：设置 basedpyright 使用的 Python
+          (setq-local lsp-bridge-python-command python-path)
+          
+          ;; 设置环境变量
+          (setenv "VIRTUAL_ENV" venv-path)
           (setenv "PATH" (concat (expand-file-name "bin" venv-path) ":" (getenv "PATH")))
           (setq-local exec-path (cons (expand-file-name "bin" venv-path) exec-path))
-          ;; 通知 lsp-bridge 环境变化
-          (when (fboundp 'lsp-bridge-reset)
-            (lsp-bridge-reset))
-          (message "已激活 uv 虚拟环境: %s" venv-path))))))
+          
+          ;; 创建 pyrightconfig.json（保底）
+          (let ((config-file (expand-file-name "pyrightconfig.json" project-root)))
+            (unless (file-exists-p config-file)
+              (with-temp-file config-file
+                (insert "{\n  \"venvPath\": \".\",\n  \"venv\": \".venv\",\n  \"pythonVersion\": \"3.12\"\n}"))))
+          
+          ;; 重启 lsp-bridge
+          (when (fboundp 'lsp-bridge-restart-process)
+            (lsp-bridge-restart-process))
+          
+          (message "对 已激活虚拟环境: %s" venv-path))))))
+
+
 
 ;; 快捷命令：使用 uv 运行当前脚本
 (defun my/python-run-uv ()
