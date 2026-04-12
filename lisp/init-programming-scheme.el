@@ -5,6 +5,8 @@
 ;; 使用Emacs内置的comint模式，不需要geiser
 (setq scheme-program-name "guile")
 
+
+
 ;; 启动Scheme进程
 (defun run-scheme-guile ()
   "启动Guile REPL"
@@ -77,3 +79,4 @@
 
 ;; *********************
 (provide 'init-programming-scheme)
+

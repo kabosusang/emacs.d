@@ -246,8 +246,34 @@
   (setq-local indent-line-function 'insert-tab)
   (message "已禁用所有自动格式化"))
 
+
 ;; 绑定修复函数到快捷键
 (global-set-key (kbd "C-c F") 'my/disable-all-auto-formatting)
+;; 在 rust-mode 中禁用 flycheck
+(add-hook 'rust-mode-hook (lambda () (flycheck-mode -1)))
+
+
+;; ========== 自定义 lsp-bridge 项目根目录检测 ==========
+(defun my/lsp-bridge-get-project-path (file-path)
+  "自定义项目根目录检测，优先使用 Cargo.toml"
+  (let ((default-directory (file-name-directory file-path)))
+    (expand-file-name
+     (cond
+      ((string-match-p "\\.rs\\'" file-path)
+       (or (locate-dominating-file default-directory "Cargo.toml")
+           (locate-dominating-file default-directory ".git")))
+      ((string-match-p "\\.py\\'" file-path)
+       (or (locate-dominating-file default-directory "pyproject.toml")
+           (locate-dominating-file default-directory "setup.py")
+           (locate-dominating-file default-directory ".git")))
+      ((string-match-p "\\.\\(c\\|cpp\\|h\\|hpp\\)\\'" file-path)
+       (or (locate-dominating-file default-directory "compile_commands.json")
+           (locate-dominating-file default-directory "CMakeLists.txt")
+           (locate-dominating-file default-directory ".git")))
+      (t (locate-dominating-file default-directory ".git"))))))
+
+(setq lsp-bridge-get-project-path-by-filepath #'my/lsp-bridge-get-project-path)
+
 
 ;; lsp-bridge 优化配置 - 清理版本
 
@@ -275,6 +301,7 @@
 ;; 禁用不必要的功能（提升速度）
 ;;(setq lsp-bridge-enable-hover-diagnostic nil)    ; 禁用悬停诊断
 ;;(setq lsp-bridge-enable-search-words nil)        ; 禁用单词搜索
+
 
 
 
