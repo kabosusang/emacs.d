@@ -42,6 +42,7 @@
 (require 'init-preload-local nil t)
 (require 'init-themes)
 (require 'init-font)
+(require 'init-dashboard)
 
 
 ;;auto-save
@@ -293,19 +294,19 @@
   :hook
   (flycheck-mode . flycheck-clang-tidy-setup))
 
-(use-package dashboard
-  :ensure t
-  :diminish dashboard-mode
-  :config
-  (setq dashboard-banner-logo-title "Coding is happening")
-  (setq dashboard-projects-backend 'projectile)
-  (setq dashboard-startup-banner 'official)
-  (setq dashboard-items '((recents  . 8)
-						  (bookmarks . 5)
-						  (projects . 10)))
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (dashboard-setup-startup-hook))
+;; (use-package dashboard
+;;   :ensure t
+;;   :diminish dashboard-mode
+;;   :config
+;;   (setq dashboard-banner-logo-title "Coding is happening")
+;;   (setq dashboard-projects-backend 'projectile)
+;;   (setq dashboard-startup-banner 'official)
+;;   (setq dashboard-items '((recents  . 8)
+;; 						  (bookmarks . 5)
+;; 						  (projects . 10)))
+;;   (setq dashboard-set-heading-icons t)
+;;   (setq dashboard-set-file-icons t)
+;;   (dashboard-setup-startup-hook))
 
 (use-package projectile
   :ensure t

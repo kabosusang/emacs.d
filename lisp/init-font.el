@@ -11,8 +11,6 @@
 
 
 
-
-
 ;;Icons
 (use-package treemacs-nerd-icons
   :ensure t            ; 确保包管理器自动安装此包
