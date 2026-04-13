@@ -15,6 +15,7 @@ Forked from [Pavinberg/emacs.d](https://github.com/Pavinberg/emacs.d)
 - 🐍 **Python**：`pyright` + `ruff`
 - 🦀 **Rust**：`rust-analyzer` 
 - 🔧 **C/C++**：`clangd` + `flycheck-clang-tidy`
+- 🔮 **Scheme**：`guile` + `paredit` + `geiser`
 - 🤖 **Claude Code**：AI 辅助编程集成
 - 🎨 现代化界面：`ivy`/`counsel`、`dashboard`、`treemacs`
 - ✨ 多光标编辑：`multiple-cursors` + `hydra`
