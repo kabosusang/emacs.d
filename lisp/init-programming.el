@@ -299,10 +299,43 @@
 (setq lsp-bridge-diagnostics-delay 0.5)          ; 延迟 0.5 秒
 
 ;; 禁用不必要的功能（提升速度）
-;;(setq lsp-bridge-enable-hover-diagnostic nil)    ; 禁用悬停诊断
+(setq lsp-bridge-enable-hover-diagnostic t)    ; 禁用悬停诊断
 ;;(setq lsp-bridge-enable-search-words nil)        ; 禁用单词搜索
+(setq lsp-bridge-enable-diagnostic t)
 
 
+;; ============================================================
+;; 代码折叠配置 —— 使用 Emacs 内置的 hs-minor-mode
+;; ============================================================
+
+;; 在所有编程模式中自动启用代码折叠
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
+;; 配置快捷键（使用 C-c z 前缀，与你的 C-c f 不冲突）
+(with-eval-after-load 'hideshow
+  ;; 定义快捷键
+  (define-key hs-minor-mode-map (kbd "C-c z t") #'hs-toggle-hiding)    ; 切换折叠
+  (define-key hs-minor-mode-map (kbd "C-c z c") #'hs-hide-block)       ; 折叠当前块
+  (define-key hs-minor-mode-map (kbd "C-c z o") #'hs-show-block)       ; 展开当前块
+  (define-key hs-minor-mode-map (kbd "C-c z C-c") #'hs-hide-all)       ; 折叠所有块
+  (define-key hs-minor-mode-map (kbd "C-c z C-o") #'hs-show-all)       ; 展开所有块
+  
+  ;; 单键快速切换
+  (define-key hs-minor-mode-map (kbd "<f2>") #'hs-toggle-hiding))
+
+;; 优化折叠体验
+(setq hs-isearch-open t)        ; 搜索时自动展开折叠区域
+(setq hs-allow-nesting t)       ; 允许嵌套折叠
+(setq hs-hide-comments-when-hiding-all nil)  ; 折叠所有时也折叠注释
+
+;; 可选：显示折叠指示器
+(setq hs-set-up-overlay
+      (defun my-display-code-line-counts (ov)
+        (when (eq 'code (overlay-get ov 'hs))
+          (overlay-put ov 'display
+                       (format "... (%d lines) ..."
+                               (count-lines (overlay-start ov)
+                                            (overlay-end ov)))))))
 
 
 (provide 'init-programming)

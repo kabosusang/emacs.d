@@ -148,7 +148,7 @@
 		  (set-window-buffer (selected-window) this-win-buffer)
 		  (set-window-buffer (next-window) next-win-buffer)
 		  (select-window first-win)
-
+n
 		  (if this-win-2nd (other-window 1))))))
 
 (when *is-a-mac*
@@ -222,9 +222,9 @@
 (setq create-lockfiles nil)
 
 ;;打开最近文件
-;; (require 'recentf)
-;; (recentf-mode 1)
-;; (setq recentf-max-menu-item 10)
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-item 10)
 
 ;;高亮一行
 (global-hl-line-mode 1)
@@ -255,7 +255,7 @@
 (defun open-init-file()
   (interactive)
   (find-file user-init-file))
-(global-set-key (kbd "<f2>") 'open-init-file)
+(global-set-key (kbd "<f4>") 'open-init-file)
 
 ;;让鼠标滚动更好用
 (setq mouse-wheel-scroll-amount ' (1 ((shift) . 1) ((control) . nil)))

@@ -152,5 +152,22 @@
             (unless (file-remote-p default-directory)
               (lsp-bridge-mode))))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (provide 'init-lsp-bridge)
 ;;; init-lsp-bridge.el ends here

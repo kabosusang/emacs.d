@@ -8,7 +8,7 @@
 ;;; Code:
 (use-package dashboard
   :init (dashboard-setup-startup-hook)
-  :bind (("<f4>" . dashboard-open))
+  :bind (("<f8>" . dashboard-open))
   :custom-face
   (dashboard-items-face    ((t (:weight normal))))
   (dashboard-no-items-face ((t (:weight normal))))
