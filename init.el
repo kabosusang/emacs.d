@@ -441,14 +441,8 @@ Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cu
    ("<drag-mouse-1>" ignore)
    ("q" nil)))
 
-;; Python
-;; (require 'init-python)
+;; ALL Progamming
 (require 'init-programming)
-;(require 'init-org)
-;;scheme
-(require 'init-programming-scheme)
-;;python
-(require 'init-programming-python)
 ;;claude-code
 (require 'init-claude-code)
 

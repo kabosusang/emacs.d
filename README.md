@@ -33,11 +33,11 @@ LSP 服务器和 lsp-bridge 依赖需要安装在专用的虚拟环境中：
 # 创建虚拟环境
 uv venv ~/.emacs.d/.venv-emacs --python 3.11
 
-# 安装 LSP Python服务器
-uv pip install --python ~/.emacs.d/.venv-emacs/bin/python pyright ruff
-
 # 安装 lsp-bridge 依赖
 uv pip install --python ~/.emacs.d/.venv-emacs/bin/python epc orjson rapidfuzz watchdog six packaging
+
+#安装其他依赖[cmake,python]
+uv pip install --python ~/.emacs.d/.venv-emacs/bin/python cmake-language-server pyright ruff
 ```
 ### Python依赖如下
 ```baseh
@@ -64,6 +64,7 @@ sexpdata              1.0.2
 six                   1.17.0
 typing-extensions     4.15.0
 watchdog              6.0.0
+cmake-language-server 0.1.11
 ```
 
 ## 启动
