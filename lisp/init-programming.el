@@ -120,10 +120,11 @@
           (append lsp-clients-clangd-args
                   '("--compile-commands-dir=."
                     "--background-index"
-                    "--clang-tidy"
+                    ;; "--clang-tidy"
                     "--all-scopes-completion")))))
 
 (add-hook 'lsp-before-initialize-hook #'my/setup-compile-commands)
+
 
 ;; 8. 项目根目录检测
 (defun my/c-cpp-project-root ()
@@ -249,31 +250,35 @@
 
 ;; 绑定修复函数到快捷键
 (global-set-key (kbd "C-c F") 'my/disable-all-auto-formatting)
-;; 在 rust-mode 中禁用 flycheck
-(add-hook 'rust-mode-hook (lambda () (flycheck-mode -1)))
-
 
 ;; ========== 自定义 lsp-bridge 项目根目录检测 ==========
 (defun my/lsp-bridge-get-project-path (file-path)
   "自定义项目根目录检测，优先使用 Cargo.toml"
-  (let ((default-directory (file-name-directory file-path)))
-    (expand-file-name
-     (cond
-      ((string-match-p "\\.rs\\'" file-path)
-       (or (locate-dominating-file default-directory "Cargo.toml")
-           (locate-dominating-file default-directory ".git")))
-      ((string-match-p "\\.py\\'" file-path)
-       (or (locate-dominating-file default-directory "pyproject.toml")
-           (locate-dominating-file default-directory "setup.py")
-           (locate-dominating-file default-directory ".git")))
-      ((string-match-p "\\.\\(c\\|cpp\\|h\\|hpp\\)\\'" file-path)
-       (or (locate-dominating-file default-directory "compile_commands.json")
-           (locate-dominating-file default-directory "CMakeLists.txt")
-           (locate-dominating-file default-directory ".git")))
-      (t (locate-dominating-file default-directory ".git"))))))
+  (let* ((default-directory (file-name-directory file-path))
+         (project-root
+          (cond
+           ((string-match-p "\\.rs\\'" file-path)
+            (or (locate-dominating-file default-directory "Cargo.toml")
+                (locate-dominating-file default-directory ".git")))
+           ((string-match-p "\\.py\\'" file-path)
+            (or (locate-dominating-file default-directory "pyproject.toml")
+                (locate-dominating-file default-directory "setup.py")
+                (locate-dominating-file default-directory ".git")))
+           ((string-match-p "\\.\\(c\\|cpp\\|h\\|hpp\\)\\'" file-path)
+            (or (locate-dominating-file default-directory "compile_commands.json")
+                (locate-dominating-file default-directory "CMakeLists.txt")
+                (locate-dominating-file default-directory ".git")))
+           (t (locate-dominating-file default-directory ".git")))))
+    ;; 如果 project-root 是 nil，就用文件所在目录作为后备
+    (expand-file-name (or project-root default-directory))))
 
 (setq lsp-bridge-get-project-path-by-filepath #'my/lsp-bridge-get-project-path)
 
+;; 禁用 C/C++ Rust模式的 flycheck（等 flycheck 加载后再执行）
+(with-eval-after-load 'flycheck
+  (add-hook 'c-mode-hook (lambda () (flycheck-mode -1)))
+  (add-hook 'c++-mode-hook (lambda () (flycheck-mode -1)))
+  (add-hook 'rust-mode-hook (lambda () (flycheck-mode -1))))
 
 ;; lsp-bridge 优化配置 - 清理版本
 
