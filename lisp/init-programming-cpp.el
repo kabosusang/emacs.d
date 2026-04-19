@@ -109,8 +109,8 @@
         (compile "cmake --build build --parallel 8")
       (progn
         (message "首次配置 CMake，请稍候...")
-        (async-shell-command "cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-                             "*cmake-configure*")
+        (async-shell-command "cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                     "*cmake-configure*")
         (message "CMake 配置已启动，完成后按 F5 编译")))))
 
 (defun my/cpp-find-executable (root)
@@ -145,7 +145,7 @@
     (unless (file-exists-p "build")
       (make-directory "build"))
     (unless (file-exists-p "build/CMakeCache.txt")
-      (shell-command "cmake -B build -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"))
+       (shell-command "cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"))
     (message "正在编译...")
     (let ((result (shell-command "cmake --build build --parallel 8")))
       (if (= result 0)
@@ -206,7 +206,7 @@
   (interactive)
   (let* ((source (buffer-file-name))
          (target (file-name-sans-extension source)))
-    (compile (format "clang++ -std=c++20 -g -Wall %s -o %s && %s"
+    (compile (format "clang++ -std=c++23 -g -Wall %s -o %s && %s"
                      (shell-quote-argument source)
                      (shell-quote-argument target)
                      (shell-quote-argument target)))))

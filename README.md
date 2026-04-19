@@ -14,11 +14,11 @@ Forked from [Pavinberg/emacs.d](https://github.com/Pavinberg/emacs.d)
 - ⚡ **lsp-bridge**：异步 LSP 补全
 - 🐍 **Python**：`pyright` + `ruff`
 - 🦀 **Rust**：`rust-analyzer` 
-- 🔧 **C/C++**：`clangd` + `flycheck-clang-tidy`
+- 🔧 **C/C++**：`clangd` + `Ninja` + `Cmake` + `Clang`
 - 🔮 **Scheme**：`guile` + `paredit` + `geiser`
 - 🤖 **Claude Code**：AI 辅助编程集成
 - 🎨 现代化界面：`ivy`/`counsel`、`dashboard`、`treemacs`
-- ✨ 多光标编辑：`multiple-cursors` + `hydra`
+- ✨ 多光标编辑：`multiple-cursors` + `hyndra`
 - 📦 Git 集成：`magit` 
 
 ## 安装
