@@ -23,9 +23,18 @@
                          (electric-pair-local-mode -1)
                          (electric-layout-local-mode -1)
                          
-                         ;; 使用 tab 缩进
-                         (setq-local indent-line-function 'insert-tab)
-                         
+                         ;; 强制使用 Tab 字符
+						 (setq-local indent-tabs-mode t)
+						 (setq-local tab-width 4)
+                       
+						 ;; hungry-delete（backspace 删整片空白）
+						 (c-toggle-hungry-state -1)
+
+						 (local-set-key (kbd "<backspace>") 'delete-backward-char)
+                       
+						 ;; 使用 tab 缩进
+						 (setq-local indent-line-function 'insert-tab)
+						            
                          ;; 强制禁用 electric-pair
                          (setq electric-pair-inhibit-predicate 
                                (lambda (c) (or (eq major-mode 'c++-mode)
@@ -56,7 +65,7 @@
                   (setq-local company-backends
                               '(company-cmake company-files))))
   :config
-  (defun my/cmake-vcpkg-setup ()
+  (defun cpp/cmake-vcpkg-setup ()
     "自动检测并添加 vcpkg toolchain 文件"
     (let ((vcpkg-paths '("~/vcpkg/scripts/buildsystems/vcpkg.cmake"
                          "/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake")))
@@ -66,10 +75,10 @@
                               (list (concat "-DCMAKE_TOOLCHAIN_FILE="
                                             (expand-file-name path))))
                and return t)))
-  (add-hook 'cmake-mode-hook #'my/cmake-vcpkg-setup))
+  (add-hook 'cmake-mode-hook #'cpp/cmake-vcpkg-setup))
 
 ;; ========== 项目根目录检测 ==========
-(defun my/c-cpp-project-root ()
+(defun cpp/c-cpp-project-root ()
   "检测 C/C++ 项目根目录"
   (or (locate-dominating-file default-directory "compile_commands.json")
       (locate-dominating-file default-directory "CMakeLists.txt")
@@ -98,10 +107,10 @@
 
 ;; ========== C++ 项目构建与运行 ==========
 
-(defun my/cpp-build ()
+(defun cpp/cpp-build ()
   "在项目根目录的 build 文件夹中编译"
   (interactive)
-  (let* ((root (my/c-cpp-project-root))
+  (let* ((root (cpp/c-cpp-project-root))
          (default-directory root))
     (unless (file-exists-p "build")
       (make-directory "build"))
@@ -113,7 +122,7 @@
                      "*cmake-configure*")
         (message "CMake 配置已启动，完成后按 F5 编译")))))
 
-(defun my/cpp-find-executable (root)
+(defun cpp/cpp-find-executable (root)
   "在 build 目录下查找可执行文件"
   (let* ((build-dir (expand-file-name "build" root))
          (files (when (file-exists-p build-dir)
@@ -126,21 +135,21 @@
           (throw 'found file)))
       nil)))
 
-(defun my/cpp-run ()
+(defun cpp/cpp-run ()
   "智能查找并运行 build 目录下的可执行文件"
   (interactive)
-  (let* ((root (my/c-cpp-project-root))
-         (executable (my/cpp-find-executable root)))
+  (let* ((root (cpp/c-cpp-project-root))
+         (executable (cpp/cpp-find-executable root)))
     (if executable
         (compile (format "cd %s && %s"
                          root
                          (shell-quote-argument executable)))
       (message "在 %s/build/ 下未找到可执行文件，请先编译 (F5)" root))))
 
-(defun my/cpp-build-and-run ()
+(defun cpp/cpp-build-and-run ()
   "编译并运行当前项目（同步等待编译完成）"
   (interactive)
-  (let* ((root (my/c-cpp-project-root))
+  (let* ((root (cpp/c-cpp-project-root))
          (default-directory root))
     (unless (file-exists-p "build")
       (make-directory "build"))
@@ -149,15 +158,15 @@
     (message "正在编译...")
     (let ((result (shell-command "cmake --build build --parallel 8")))
       (if (= result 0)
-          (my/cpp-run)
+          (cpp/cpp-run)
         (message "编译失败！")))))
 
 ;; ========== 清理函数 ==========
 
-(defun my/cpp-clean-light ()
+(defun cpp/cpp-clean-light ()
   "轻量清理：只删除编译产物，保留 CMake 缓存"
   (interactive)
-  (let* ((root (my/c-cpp-project-root))
+  (let* ((root (cpp/c-cpp-project-root))
          (default-directory root))
     (if (file-exists-p "build")
         (progn
@@ -166,10 +175,10 @@
           (message "清理完成"))
       (message "build 目录不存在"))))
 
-(defun my/cpp-clean-deep ()
+(defun cpp/cpp-clean-deep ()
   "深度清理：删除整个 build 目录"
   (interactive)
-  (let* ((root (my/c-cpp-project-root))
+  (let* ((root (cpp/c-cpp-project-root))
          (build-dir (expand-file-name "build" root)))
     (when (file-exists-p build-dir)
       (if (yes-or-no-p (format "确定要删除 %s 吗？" build-dir))
@@ -178,10 +187,10 @@
             (message "已删除 %s" build-dir))
         (message "已取消清理")))))
 
-(defun my/cpp-clean-all ()
+(defun cpp/cpp-clean-all ()
   "完全清理：删除 build 目录和 compile_commands.json 软链接"
   (interactive)
-  (let* ((root (my/c-cpp-project-root))
+  (let* ((root (cpp/c-cpp-project-root))
          (build-dir (expand-file-name "build" root))
          (cdb-link (expand-file-name "compile_commands.json" root)))
     (when (file-exists-p build-dir)
@@ -192,16 +201,16 @@
       (delete-file cdb-link)
       (message "已删除软链接"))))
 
-(defun my/cpp-clean-and-rebuild ()
+(defun cpp/cpp-clean-and-rebuild ()
   "深度清理后重新构建"
   (interactive)
-  (my/cpp-clean-deep)
+  (cpp/cpp-clean-deep)
   (sit-for 0.5)
-  (my/cpp-build))
+  (cpp/cpp-build))
 
 ;; ========== 单文件快速运行（无 CMake） ==========
 
-(defun my/cpp-run-single-file ()
+(defun cpp/cpp-run-single-file ()
   "编译并运行当前单个 .cpp 文件"
   (interactive)
   (let* ((source (buffer-file-name))
@@ -214,13 +223,13 @@
 ;; ========== 快捷键绑定 ==========
 (add-hook 'c-mode-common-hook
           (lambda ()
-            (local-set-key (kbd "<f5>") 'my/cpp-build)
-            (local-set-key (kbd "<f6>") 'my/cpp-run)
-            (local-set-key (kbd "<f7>") 'my/cpp-build-and-run)
-            (local-set-key (kbd "<f8>") 'my/cpp-clean-light)
-            (local-set-key (kbd "<f9>") 'my/cpp-clean-deep)
-            (local-set-key (kbd "<f10>") 'my/cpp-clean-and-rebuild)
-            (local-set-key (kbd "<f12>") 'my/cpp-run-single-file)))
+            (local-set-key (kbd "<f5>") 'cpp/cpp-build)
+            (local-set-key (kbd "<f6>") 'cpp/cpp-run)
+            (local-set-key (kbd "<f7>") 'cpp/cpp-build-and-run)
+            (local-set-key (kbd "<f8>") 'cpp/cpp-clean-light)
+            (local-set-key (kbd "<f9>") 'cpp/cpp-clean-deep)
+            (local-set-key (kbd "<f10>") 'cpp/cpp-clean-and-rebuild)
+            (local-set-key (kbd "<f12>") 'cpp/cpp-run-single-file)))
 
 (provide 'init-programming-cpp)
 ;;; init-programming-cpp.el ends here

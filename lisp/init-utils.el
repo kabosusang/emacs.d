@@ -164,27 +164,6 @@ n
 (setq auto-save-file-name-transforms
       '((".*" "~/.emacs.d/auto-save/" t)))
 
-;; 自定义移动行函数
-(defun my-move-line-up ()
-  "向上移动当前行（Shift+Alt+Up）"
-  (interactive)
-  (let ((col (current-column)))
-    (transpose-lines 1)
-    (forward-line -2)
-    (move-to-column col)))
-
-(defun my-move-line-down ()
-  "向下移动当前行（Shift+Alt+Down）"
-  (interactive)
-  (let ((col (current-column)))
-    (forward-line 1)
-    (transpose-lines 1)
-    (forward-line -1)
-    (move-to-column col)))
-
-;; 绑定快捷键
-(global-set-key (kbd "<M-up>") 'my-move-line-up)
-(global-set-key (kbd "<M-down>") 'my-move-line-down)
 
 ;; 删除所有buffer
 (defun kill-other-buffers ()
