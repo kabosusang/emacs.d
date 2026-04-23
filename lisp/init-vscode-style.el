@@ -16,28 +16,22 @@
 (global-set-key (kbd "C-S-l") 'mc/mark-all-dwim)
 
 
-;; 自定义移动行函数
-(defun my-move-line-up ()
-  "向上移动当前行（Shift+Alt+Up）"
-  (interactive)
-  (let ((col (current-column)))
-    (transpose-lines 1)
-    (forward-line -2)
-    (move-to-column col)))
-
-(defun my-move-line-down ()
-  "向下移动当前行（Shift+Alt+Down）"
-  (interactive)
-  (let ((col (current-column)))
-    (forward-line 1)
-    (transpose-lines 1)
-    (forward-line -1)
-    (move-to-column col)))
-
-;; 绑定快捷键
-(global-set-key (kbd "<M-up>") 'my-move-line-up)
-(global-set-key (kbd "<M-down>") 'my-move-line-down)
-
+(use-package move-text
+  :ensure t
+  :config
+  ;; 启用默认快捷键 M-up / M-down（原生支持选区和单行移动）
+  (move-text-default-bindings)
+  
+  ;; 可选：移动后自动缩进
+  (defun indent-region-advice (&rest ignored)
+    (let ((deactivate deactivate-mark))
+      (if (region-active-p)
+          (indent-region (region-beginning) (region-end))
+        (indent-region (line-beginning-position) (line-end-position)))
+      (setq deactivate-mark deactivate)))
+  
+  (advice-add 'move-text-up :after 'indent-region-advice)
+  (advice-add 'move-text-down :after 'indent-region-advice))
 
 
 
