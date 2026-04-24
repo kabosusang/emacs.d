@@ -53,7 +53,8 @@
   :ensure t
   :config
   (global-set-key (kbd "C-c C-f") 'clang-format-buffer)
-  (global-set-key (kbd "C-c f") 'clang-format-region))
+  (global-set-key (kbd "C-c f") 'clang-format-buffer)    ;; 格式化buffer
+  (global-set-key (kbd "C-c M-f") 'clang-format-region)) ;; 区域格式化
 
 ;; ========== CMake 支持 ==========
 (use-package cmake-mode
@@ -162,6 +163,14 @@
         (message "编译失败！")))))
 
 ;; ========== 清理函数 ==========
+(defun cpp/cpp-reconfigure ()
+  "强制重新运行 CMake 配置，更新 compile_commands.json"
+  (interactive)
+  (let* ((root (cpp/c-cpp-project-root))
+         (default-directory root))
+    (message "重新配置 CMake...")
+    (async-shell-command "cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                         "*cmake-configure*")))
 
 (defun cpp/cpp-clean-light ()
   "轻量清理：只删除编译产物，保留 CMake 缓存"
