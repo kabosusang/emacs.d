@@ -42,20 +42,6 @@
 
 ;; ========== 通用编程辅助功能 ==========
 
-;; 修复函数 - 禁用所有自动格式化
-(defun my/disable-all-auto-formatting ()
-  "禁用所有自动格式化功能"
-  (interactive)
-  (electric-indent-local-mode -1)
-  (electric-pair-local-mode -1)
-  (electric-layout-local-mode -1)
-  (setq-local c-electric-flag nil)
-  (setq-local c-auto-newline nil)
-  (setq-local indent-line-function 'insert-tab)
-  (message "已禁用所有自动格式化"))
-
-(global-set-key (kbd "C-c F") 'my/disable-all-auto-formatting)
-
 ;; Print ANSI colors in compilation mode buffer
 (ignore-errors
   (require 'ansi-color)

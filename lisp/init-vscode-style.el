@@ -2,7 +2,7 @@
 ;; VSCODE STYLE Configuration
 ;; ========================================
 ;; ===== 简单可靠的智能注释函数 =====
-(defun my-quick-comment ()
+(defun vsc/quick-comment ()
   "快速注释：无选区时注释当前行，有选区时注释选区。"
   (interactive)
   (if (use-region-p)

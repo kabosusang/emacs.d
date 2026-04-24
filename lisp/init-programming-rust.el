@@ -23,7 +23,6 @@
                                      :name "rust-lldb::Run"
                                      :target nil
                                      :cwd nil)))
-
 (use-package cargo
   :ensure t
   :hook

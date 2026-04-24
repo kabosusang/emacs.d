@@ -166,13 +166,13 @@ n
 
 
 ;; 删除所有buffer
-(defun kill-other-buffers ()
+(defun mybuffer/kill-other-buffers ()
   "Kill all other buffers, leaving only the current one."
   (interactive)
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
 ;; 删除所有buffer和历史buffer
-(defun kill-other-buffers-and-history ()
+(defun mybuffer/kill-other-buffers-and-history ()
   "Kill all other buffers and clear switch history, leaving only the current one."
   (interactive)
   ;; 1. 杀死其他所有缓冲区

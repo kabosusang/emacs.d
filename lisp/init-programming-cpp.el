@@ -6,47 +6,32 @@
 (use-package c++-mode
   :hook
   ((c-mode c++-mode) . (lambda ()
+                         
+                         ;; 启用基础配对（只配对括号字符）
+                         (electric-pair-local-mode 1)
+                         ;; 启用回车缩进
+                         (electric-indent-local-mode 1)
+
+                         ;; 完全关闭 cc-mode 的 electric 功能（避免和 electric-pair 冲突）
+                         (setq-local c-electric-flag nil)
                          (c-toggle-auto-newline -1)
                          (c-toggle-hungry-state -1)
-                         ;; 禁用所有自动缩进和格式化
-                         (setq-local c-electric-flag nil)
                          (setq-local c-auto-newline nil)
-                         (setq-local c-electric-brace nil)
-                         (setq-local c-electric-colon nil)
-                         (setq-local c-electric-lt-gt nil)
-                         (setq-local c-electric-paren nil)
-                         (setq-local c-electric-slash nil)
-                         (setq-local c-electric-star nil)
-                         
-                         ;; 禁用所有 electric 模式
-                         (electric-indent-local-mode -1)
-                         (electric-pair-local-mode -1)
-                         (electric-layout-local-mode -1)
-                         
-                         ;; 强制使用 Tab 字符
-						 (setq-local indent-tabs-mode t)
-						 (setq-local tab-width 4)
-                       
-						 ;; hungry-delete（backspace 删整片空白）
-						 (c-toggle-hungry-state -1)
 
-						 (local-set-key (kbd "<backspace>") 'delete-backward-char)
-                       
-						 ;; 使用 tab 缩进
-						 (setq-local indent-line-function 'insert-tab)
-						            
-                         ;; 强制禁用 electric-pair
-                         (setq electric-pair-inhibit-predicate 
-                               (lambda (c) (or (eq major-mode 'c++-mode)
-                                               (eq major-mode 'c-mode))))))
+                         ;; 缩进设置
+                         (setq-local indent-tabs-mode t)
+                         (setq-local tab-width 4)
+                         (setq-local indent-line-function 'insert-tab)
+
+                         ;; backspace 只删一个字符
+                         (local-set-key (kbd "<backspace>") 'delete-backward-char)))
   :bind
   (:map c-mode-base-map
         ("C-c o" . ff-find-other-file)
         ("C-c f" . clang-format-buffer))
   :config
   (setq clang-format-style "file")
-  (setq c-tab-always-indent nil)
-  (setq-default electric-pair-mode nil))
+  (setq c-tab-always-indent nil))
 
 ;; ========== clang-format 集成 ==========
 (use-package clang-format
