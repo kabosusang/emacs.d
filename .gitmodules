@@ -1,0 +1,6 @@
+[submodule "lsp-bridge"]
+	path = lsp-bridge
+	url = https://github.com/manateelazycat/lsp-bridge.git
+[submodule "claudbie-code"]
+	path = claudbie-code
+	url = https://github.com/stevemolitor/claude-code.el.git

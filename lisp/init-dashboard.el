@@ -7,13 +7,13 @@
 ;;
 ;;; Code:
 (use-package dashboard
-  :init (dashboard-setup-startup-hook)
+  :ensure t
   :bind (("<f8>" . dashboard-open))
   :custom-face
   (dashboard-items-face    ((t (:weight normal))))
   (dashboard-no-items-face ((t (:weight normal))))
   :config
-    ;;; --- Appearance & Theming ---
+  ;;; --- Appearance & Theming ---
   (setq dashboard-startup-banner (expand-file-name "banner.txt" user-emacs-directory)
         dashboard-banner-logo-title "大部分の人は大きくなりたくないです。ただ子供になり続けられないです"
         dashboard-center-content t
@@ -27,7 +27,10 @@
 
   (when (find-font (font-spec :family "ComicMono"))
     (set-face-attribute 'dashboard-text-banner nil
-                        :family "ComicMono")))
+                        :family "ComicMono"))
+
+  ;; 使用 dashboard-refresh-buffer 或直接打开
+  (dashboard-open))
 
 (provide 'init-dashboard)
 ;;; init-dashboard.el ends here
