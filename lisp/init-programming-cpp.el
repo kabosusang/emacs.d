@@ -6,32 +6,44 @@
 (use-package c++-mode
   :hook
   ((c-mode c++-mode) . (lambda ()
-                         
-                         ;; 启用基础配对（只配对括号字符）
+                         ;; 启用基础配对
                          (electric-pair-local-mode 1)
                          ;; 启用回车缩进
                          (electric-indent-local-mode 1)
 
-                         ;; 完全关闭 cc-mode 的 electric 功能（避免和 electric-pair 冲突）
-                         (setq-local c-electric-flag nil)
-                         (c-toggle-auto-newline -1)
-                         (c-toggle-hungry-state -1)
+                         ;; 缩进设置（使用空格缩进）
+                         (setq-local indent-tabs-mode nil)
+                         (setq-local tab-width 4)
+                         (setq-local c-basic-offset 4)
+
+                         ;; 启用 cc-mode 智能功能
+                         (setq-local c-electric-flag t)
+                         (c-toggle-electric-state 1)
                          (setq-local c-auto-newline nil)
 
-                         ;; 缩进设置
-                         (setq-local indent-tabs-mode t)
-                         (setq-local tab-width 4)
-                         (setq-local indent-line-function 'insert-tab)
+                         ;; TAB 键智能缩进
+                         (setq-local c-tab-always-indent t)
 
-                         ;; backspace 只删一个字符
-                         (local-set-key (kbd "<backspace>") 'delete-backward-char)))
+                         ;; 智能 backspace：退到可缩进位置
+                         (local-set-key (kbd "<backspace>")
+                                       (lambda ()
+                                         (interactive)
+                                         (if (and (not (bolp))
+                                                  (save-excursion
+                                                    (skip-chars-backward " \t")
+                                                    (bolp)))
+                                             (back-to-indentation)
+                                           (delete-backward-char 1))))
+
+                         ;; 这些字符输入时自动格式化
+                         (setq-local electric-indent-chars '(?\n ?\} ?\: ?\#))))
   :bind
   (:map c-mode-base-map
         ("C-c o" . ff-find-other-file)
         ("C-c f" . clang-format-buffer))
   :config
-  (setq clang-format-style "file")
-  (setq c-tab-always-indent nil))
+  (setq clang-format-style "file"))
+
 
 ;; ========== clang-format 集成 ==========
 (use-package clang-format
@@ -224,6 +236,84 @@
             (local-set-key (kbd "<f9>") 'cpp/cpp-clean-deep)
             (local-set-key (kbd "<f10>") 'cpp/cpp-clean-and-rebuild)
             (local-set-key (kbd "<f12>") 'cpp/cpp-run-single-file)))
+
+
+
+
+;; ========== Vcpkg 集成 ==========
+
+(defun cpp/cpp-vcpkg-toolchain-path ()
+  "返回 vcpkg toolchain cmake 文件的路径"
+  (let ((vcpkg-root (or (getenv "VCPKG_ROOT")
+                        (expand-file-name "~/.local/share/vcpkg"))))
+    (when (and vcpkg-root (file-exists-p vcpkg-root))
+      (let ((toolchain (expand-file-name "scripts/buildsystems/vcpkg.cmake" vcpkg-root)))
+        (when (file-exists-p toolchain)
+          toolchain)))))
+
+(defun cpp/cpp-build-vcpkg ()
+  "使用 vcpkg toolchain 配置并编译项目"
+  (interactive)
+  (let* ((root (cpp/c-cpp-project-root))
+         (default-directory root)
+         (toolchain (cpp/cpp-vcpkg-toolchain-path)))
+    (unless toolchain
+      (error "vcpkg toolchain 未找到，请检查 VCPKG_ROOT 环境变量"))
+    (unless (file-exists-p "build")
+      (make-directory "build"))
+    (if (file-exists-p "build/CMakeCache.txt")
+        (compile "cmake --build build --parallel 8")
+      (progn
+        (message "首次配置 CMake (vcpkg)，请稍候...")
+        (async-shell-command
+         (format "cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE=%s"
+                 toolchain)
+         "*cmake-configure*")
+        (message "CMake 配置已启动，完成后按 <f5> 编译")))))
+
+(defun cpp/cpp-build-and-run-vcpkg ()
+  "使用 vcpkg toolchain 编译并运行项目"
+  (interactive)
+  (let* ((root (cpp/c-cpp-project-root))
+         (default-directory root)
+         (toolchain (cpp/cpp-vcpkg-toolchain-path)))
+    (unless toolchain
+      (error "vcpkg toolchain 未找到，请检查 VCPKG_ROOT 环境变量"))
+    (unless (file-exists-p "build")
+      (make-directory "build"))
+    (unless (file-exists-p "build/CMakeCache.txt")
+      (shell-command
+       (format "cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE=%s"
+               toolchain)))
+    (message "正在编译...")
+    (let ((result (shell-command "cmake --build build --parallel 8")))
+      (if (= result 0)
+          (cpp/cpp-run)
+        (message "编译失败！")))))
+
+(defun cpp/cpp-reconfigure-vcpkg ()
+  "使用 vcpkg toolchain 重新配置 CMake"
+  (interactive)
+  (let* ((root (cpp/c-cpp-project-root))
+         (default-directory root)
+         (toolchain (cpp/cpp-vcpkg-toolchain-path)))
+    (unless toolchain
+      (error "vcpkg toolchain 未找到，请检查 VCPKG_ROOT 环境变量"))
+    (message "重新配置 CMake (vcpkg)...")
+    (async-shell-command
+     (format "cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE=%s"
+             toolchain)
+     "*cmake-configure*")))
+
+
+
+
+
+
+
+
+
+
 
 (provide 'init-programming-cpp)
 ;;; init-programming-cpp.el ends here

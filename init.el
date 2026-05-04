@@ -91,8 +91,11 @@
    ("C-c v" . 'ivy-push-view)
    ("C-c s" . 'ivy-switch-view)
    ("C-c V" . 'ivy-pop-view)
+   ("C-c g" . 'counsel-rg)  
    ("C-x C-@" . 'counsel-mark-ring)
-   ("C-x C-SPC" . 'counsel-mark-ring))
+   ("C-x C-SPC" . 'counsel-mark-ring)
+   
+   )
  :bind
  (:map minibuffer-local-map
         ("C-r" . counsel-minibuffer-history)))
