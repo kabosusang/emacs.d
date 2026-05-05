@@ -40,6 +40,8 @@
 (setq lsp-bridge-enable-hover-diagnostic t)
 (setq lsp-bridge-enable-diagnostic t)
 
+
+
 ;; ========== 通用编程辅助功能 ==========
 
 ;; Print ANSI colors in compilation mode buffer
