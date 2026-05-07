@@ -25,7 +25,7 @@
                          (setq-local c-tab-always-indent t)
 
 						 ;; ── 显示空白字符（只显示尾部空格和 TAB） ──
-                         (setq-local show-trailing-whitespace t)
+                         ;; (setq-local show-trailing-whitespace t)
 
                          ;; 智能 backspace：退到可缩进位置
                          ;; (local-set-key (kbd "<backspace>")
