@@ -1,6 +1,12 @@
 [submodule "lsp-bridge"]
-	path = lsp-bridge
+	path = vendor/lsp-bridge
 	url = https://github.com/manateelazycat/lsp-bridge.git
-[submodule "claudbie-code"]
-	path = claudbie-code
+[submodule "claude-code"]
+	path = vendor/claude-code
 	url = https://github.com/stevemolitor/claude-code.el.git
+[submodule "acm-terminal"]
+	path = vendor/acm-terminal
+	url = git@github.com:twlz0ne/acm-terminal.git
+[submodule "vendor/popon"]
+	path = vendor/popon
+	url = https://codeberg.org/akib/emacs-popon.git

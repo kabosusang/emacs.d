@@ -6,11 +6,10 @@
 ;; git clone https://github.com/stevemolitor/claude-code.el.git ~/.emacs.d/claude-code
 
 ;; inheritenv 已手动下载到 ~/.emacs.d/inheritenv/
-(add-to-list 'load-path "~/.emacs.d/inheritenv")
+(add-to-list 'load-path "~/.emacs.d/vendor/inheritenv")
 (require 'inheritenv)
 
-;; 加载 claude-code
-(add-to-list 'load-path "~/.emacs.d/claude-code")
+(add-to-list 'load-path "~/.emacs.d/vendor/claude-code")
 (require 'claude-code)
 
 ;; 确保 eat 已安装

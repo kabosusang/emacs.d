@@ -166,8 +166,10 @@
 
 (use-package company
   :ensure t
-  :init (global-company-mode)
+  :if (display-graphic-p)
   :config
+  (global-company-mode)
+  
   ;; 基本设置
   (setq company-minimum-prefix-length 1)
   (setq company-tooltip-align-annotations t)
@@ -337,6 +339,8 @@
   :ensure t
   :defer t)
 
+;; acm-terminal
+(require 'init-acm-terminal.el)
 ;; lsp-bridge
 (require 'init-lsp-bridge)
 
@@ -370,22 +374,20 @@
 
 (use-package yasnippet
   :ensure t
-  ;; :init
-  ;; (yas-global-mode)
   :hook
   (prog-mode . yas-minor-mode)
   :bind
   (:map yas-minor-mode-map ("S-<tab>" . yas-expand))
   :config
   (yas-reload-all)
-  (defun company-mode/backend-with-yas (backend)
-	(if (and (listp backend) (member 'company-yasnippet backend))
-		backend
-      (append (if (consp backend) backend (list backend))
-              '(:with company-yasnippet))))
-  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-
-
+  ;; 只在 company 可用时修改它的 backends
+  (when (boundp 'company-backends)
+    (defun company-mode/backend-with-yas (backend)
+      (if (and (listp backend) (member 'company-yasnippet backend))
+          backend
+        (append (if (consp backend) backend (list backend))
+                '(:with company-yasnippet))))
+    (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends)))
   
   ;; unbind <TAB> completion
   (define-key yas-minor-mode-map [(tab)]        nil)

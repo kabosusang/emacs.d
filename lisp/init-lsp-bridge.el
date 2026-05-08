@@ -8,7 +8,7 @@
 ;;; Code:
 
 ;; Add lsp-bridge to load path (installed via git clone in .emacs.d)
-(add-to-list 'load-path (expand-file-name "lsp-bridge" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "vendor/lsp-bridge" user-emacs-directory))
 
 ;; 使用 use-package 声明 yasnippet 依赖
 (use-package yasnippet
