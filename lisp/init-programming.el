@@ -18,7 +18,7 @@
             (or (locate-dominating-file default-directory "pyproject.toml")
                 (locate-dominating-file default-directory "setup.py")
                 (locate-dominating-file default-directory ".git")))
-           ((string-match-p "\\.\\(c\\|cpp\\|h\\|hpp\\)\\'" file-path)
+           ((string-match-p "\\.\\(c\\|cpp\\|h\\|hpp\\|ixx\\|cppm\\)\\'" file-path)
             (or (locate-dominating-file default-directory "compile_commands.json")
                 (locate-dominating-file default-directory "CMakeLists.txt")
                 (locate-dominating-file default-directory ".git")))

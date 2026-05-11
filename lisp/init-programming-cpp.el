@@ -2,6 +2,14 @@
 ;;; Commentary:
 ;;; Code:
 
+ 	
+(with-eval-after-load 'treemacs
+  ;; 给 .cppm 文件设置图标（TUI 终端也能用）
+  (treemacs-define-custom-icon " " "cppm")
+  
+  ;; 给 .ixx 文件设置图标
+  (treemacs-define-custom-icon " " "ixx"))
+
 ;; ========== C/C++ 编辑配置 ==========
 (use-package c++-mode
   :hook
@@ -258,7 +266,7 @@
          (default-directory root)
          (toolchain (cpp/cpp-vcpkg-toolchain-path)))
     (unless toolchain
-      (error "vcpkg toolchain 未找到，请检查 VCPKG_ROOT 环境变量"))
+/      (error "vcpkg toolchain 未找到，请检查 VCPKG_ROOT 环境变量"))
     (unless (file-exists-p "build")
       (make-directory "build"))
     (if (file-exists-p "build/CMakeCache.txt")

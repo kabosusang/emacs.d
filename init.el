@@ -75,6 +75,9 @@
 (use-package counsel
   :ensure t)
 
+(use-package wgrep
+  :ensure t)
+
 (use-package ivy
   :ensure t
   :init
@@ -349,6 +352,7 @@
   :defer t
   :config
   (treemacs-tag-follow-mode)
+  
   :bind
   (:map global-map
         ("M-0"       . treemacs-select-window)
