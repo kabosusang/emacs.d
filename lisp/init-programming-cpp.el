@@ -2,13 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
- 	
 (with-eval-after-load 'treemacs
   ;; 给 .cppm 文件设置图标（TUI 终端也能用）
   (treemacs-define-custom-icon " " "cppm")
   
   ;; 给 .ixx 文件设置图标
-  (treemacs-define-custom-icon " " "ixx"))
+  (treemacs-define-custom-icon " " "ixx")) 	
+
 
 ;; ========== C/C++ 编辑配置 ==========
 (use-package c++-mode
