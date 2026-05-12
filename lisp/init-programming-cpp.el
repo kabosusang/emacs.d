@@ -2,13 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 
-(with-eval-after-load 'treemacs
-  ;; 给 .cppm 文件设置图标（TUI 终端也能用）
-  (treemacs-define-custom-icon " " "cppm")
-  
-  ;; 给 .ixx 文件设置图标
-  (treemacs-define-custom-icon " " "ixx")) 	
+;; 放在 treemacs 加载之前
+(if (display-graphic-p)
+     (with-eval-after-load 'treemacs
+       (treemacs-define-custom-image-icon
+         "~/.emacs.d/themes/icons/cpp-module.png"
+         "cppm"
+         "ixx"))
+;; TUI 需要先定义好，treemacs 启动时才能读取
+   (setq treemacs-custom-icon-config
+         '(("cppm" . "M<")
+           ("ixx" . "M<"))))
 
+(add-to-list 'auto-mode-alist '("\\.cppm\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.ixx\\'" . c++-mode))
 
 ;; ========== C/C++ 编辑配置 ==========
 (use-package c++-mode

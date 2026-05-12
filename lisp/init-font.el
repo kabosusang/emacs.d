@@ -2,8 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+;; (set-frame-font "ComicMono-22" nil t)
  ;; 设置主字体为某个 Nerd Font 的 Mono 版本
-(set-frame-font "ComicMono-22" nil t)
+(set-frame-font "CaskaydiaMono Nerd Font-22" nil t)
 
 ; (set-frame-font "FiraCode Nerd Font Mono" nil t)
 ;; 追加符号字体，确保图标字符有字体可用
