@@ -76,6 +76,8 @@
 ;; ========== 加载语言特定配置 ==========
 (require 'init-programming-cpp)
 (require 'init-programming-rust)
+(require 'init-dape)
+
 (require 'init-programming-python)
 (require 'init-programming-scheme)
 

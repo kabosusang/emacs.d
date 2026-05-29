@@ -16,29 +16,35 @@
 (add-to-list 'auto-mode-alist '("\\.cppm\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.ixx\\'" . c++-mode))
 
-(setenv "SDL_VIDEO_DRIVER" "wayland")
-
+;;(setenv "SDL_VIDEO_DRIVER" "wayland")
 
 ;; ========== C/C++ 编辑配置 ==========
 (use-package c++-mode
   :hook
   ((c-mode c++-mode) . (lambda ()
                          (electric-pair-local-mode 1)
-                         (electric-indent-local-mode 1)
                          (setq-local indent-tabs-mode nil)
                          (setq-local tab-width 4)
                          (setq-local c-basic-offset 4)
                          (setq-local c-electric-flag t)
-                         (c-toggle-electric-state 1)
                          (setq-local c-auto-newline nil)
                          (setq-local c-tab-always-indent t)
-                         (setq-local electric-indent-chars '(?\n ?\} ?\: ?\#))))
+                         
+                         ;; 完全禁用 electric indent（最直接）
+                         (electric-indent-local-mode -1)
+                         
+                         ;; 但保留 TAB 手动缩进
+                         (local-set-key (kbd "TAB") 'indent-for-tab-command)
+                         ;; (local-set-key (kbd "RET") 'newline-and-indent)
+						 (local-set-key (kbd "RET") 'newline)
+						 ))
   :bind
   (:map c-mode-base-map
         ("C-c o" . ff-find-other-file)
         ("C-c f" . clang-format-buffer))
   :config
   (setq clang-format-style "file"))
+
 
 ;; ========== clang-format 集成 ==========
 (use-package clang-format

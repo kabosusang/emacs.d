@@ -24,6 +24,9 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 
 
+
+(setenv "EDITOR" "emacsclient -t")
+(setenv "ALTERNATE_EDITOR" "emacs -nw")
 ;;----------------------------------------------------------------------------
 ;; Adjust garbage collection thresholds during startup, and thereafter
 ;;----------------------------------------------------------------------------

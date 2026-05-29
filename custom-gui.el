@@ -11,7 +11,8 @@
 		 highlight-symbol magit marginalia move-text multiple-cursors
 		 mwim rainbow-delimiters rust-mode smart-mode-line tiny
 		 treemacs-nerd-icons treemacs-projectile undo-tree
-		 use-package-hydra vterm yaml-mode yasnippet-snippets)))
+		 use-package-hydra vterm with-editor yaml-mode
+		 yasnippet-snippets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
