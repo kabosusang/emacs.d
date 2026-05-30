@@ -26,25 +26,16 @@
                          (setq-local indent-tabs-mode nil)
                          (setq-local tab-width 4)
                          (setq-local c-basic-offset 4)
-                         (setq-local c-electric-flag t)
-                         (setq-local c-auto-newline nil)
                          (setq-local c-tab-always-indent t)
-                         
-                         ;; 完全禁用 electric indent（最直接）
-                         (electric-indent-local-mode -1)
-                         
-                         ;; 但保留 TAB 手动缩进
-                         (local-set-key (kbd "TAB") 'indent-for-tab-command)
-                         ;; (local-set-key (kbd "RET") 'newline-and-indent)
-						 (local-set-key (kbd "RET") 'newline)
-						 ))
+                                                  ;; 让 lsp-bridge 在保存时格式化
+                         (add-hook 'before-save-hook #'lsp-bridge-code-format nil t)))
   :bind
-  (:map c-mode-base-map
-        ("C-c o" . ff-find-other-file)
-        ("C-c f" . clang-format-buffer))
+  (("C-c f" . lsp-bridge-code-format)  ;; 改用 lsp-bridge 的格式化
+   ("C-c o" . ff-find-other-file))
   :config
-  (setq clang-format-style "file"))
-
+  ;; 这个可以删掉了，由 clangd 的 .clang-format 接管
+  ;; (setq clang-format-style "file")
+  )
 
 ;; ========== clang-format 集成 ==========
 (use-package clang-format
