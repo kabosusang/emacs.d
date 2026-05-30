@@ -200,9 +200,7 @@
            company-files
            :with
            company-yasnippet)
-          (company-dabbrev
-           :separate t
-           :ignore-case t)))  ; 这里也要设置 :ignore-case t
+          (company-dabbrev :separate)))
   )
 
 ;; 添加模糊匹配搜索

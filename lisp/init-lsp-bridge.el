@@ -37,7 +37,7 @@
   (setq lsp-bridge-enable-search-words t)
   (setq lsp-bridge-enable-auto-format-code nil)
   (setq lsp-bridge-enable-debug nil)
-  ;; (setq lsp-bridge-enable-inlay-hint t)
+  (setq lsp-bridge-enable-inlay-hint t)
 
   ;; Language Server Settings
   (setq lsp-bridge-c-lsp-server "clangd")
@@ -112,6 +112,92 @@
             ;; Then enable lsp-bridge if not remote
             (unless (file-remote-p default-directory)
               (lsp-bridge-mode))))
+
+;; ===========================================
+;; Mouse hover support via help-echo overlay
+;; ===========================================
+(defvar my/lsp-bridge-hover-overlay nil
+  "Overlay for displaying hover info as help-echo on mouse hover.")
+(defvar my/lsp-bridge-hover-timer nil
+  "Idle timer for updating hover help-echo.")
+(defvar my/lsp-bridge-hover--intercept nil
+  "Non-nil when we should intercept the hover callback result.")
+(defvar my/lsp-bridge-hover--target-pos nil
+  "Buffer position where the hover overlay should be placed.")
+(defvar my/lsp-bridge-hover--last-pos nil
+  "Last position where hover was requested.")
+
+(defun my/lsp-bridge-hover--intercept-callback (orig-fun value)
+  "Intercept hover callback to set help-echo instead of showing buffer."
+  (if my/lsp-bridge-hover--intercept
+      (progn
+        (setq my/lsp-bridge-hover--intercept nil)
+        (when my/lsp-bridge-hover--target-pos
+          (save-excursion
+            (goto-char my/lsp-bridge-hover--target-pos)
+            (when-let* ((bounds (bounds-of-thing-at-point 'symbol))
+                        (ov (or my/lsp-bridge-hover-overlay
+                                (make-overlay (car bounds) (cdr bounds)))))
+              (move-overlay ov (car bounds) (cdr bounds))
+              (overlay-put ov 'help-echo
+                           (replace-regexp-in-string
+                            "```[^`]*```" ""
+                            (replace-regexp-in-string "\n\n+" "\n" value)))
+              (setq my/lsp-bridge-hover-overlay ov)))
+          (setq my/lsp-bridge-hover--target-pos nil)))
+    (funcall orig-fun value)))
+
+(advice-add 'lsp-bridge-show-documentation--callback
+            :around #'my/lsp-bridge-hover--intercept-callback)
+
+(defun my/lsp-bridge-hover--update ()
+  "Update help-echo overlay at current point via LSP hover."
+  (when (and lsp-bridge-mode
+             (not (minibufferp))
+             (lsp-bridge-has-lsp-server-p)
+             (symbol-at-point)
+             (not (equal (point) my/lsp-bridge-hover--last-pos)))
+    (let ((pos (point)))
+      (setq my/lsp-bridge-hover--last-pos pos
+            my/lsp-bridge-hover--intercept t
+            my/lsp-bridge-hover--target-pos pos)
+      (lsp-bridge-call-file-api
+       "hover"
+       (lsp-bridge--point-position pos)
+       (lsp-bridge--point-position pos)
+       "show"))))
+
+(defun my/lsp-bridge-hover--cleanup ()
+  "Remove hover overlay when cursor moves."
+  (setq my/lsp-bridge-hover--last-pos nil)
+  (when my/lsp-bridge-hover-overlay
+    (delete-overlay my/lsp-bridge-hover-overlay)
+    (setq my/lsp-bridge-hover-overlay nil)))
+
+(defun my/lsp-bridge-hover-enable ()
+  "Enable mouse hover support via help-echo."
+  (interactive)
+  (setq my/lsp-bridge-hover-timer
+        (run-with-idle-timer 0.5 t #'my/lsp-bridge-hover--update))
+  (add-hook 'post-command-hook #'my/lsp-bridge-hover--cleanup nil t)
+  (message "Mouse hover (help-echo) enabled"))
+
+(defun my/lsp-bridge-hover-disable ()
+  "Disable mouse hover support."
+  (interactive)
+  (when my/lsp-bridge-hover-timer
+    (cancel-timer my/lsp-bridge-hover-timer)
+    (setq my/lsp-bridge-hover-timer nil))
+  (remove-hook 'post-command-hook #'my/lsp-bridge-hover--cleanup t)
+  (my/lsp-bridge-hover--cleanup)
+  (message "Mouse hover disabled"))
+
+;; Enable hover in C/C++ modes
+(add-hook 'c-mode-hook #'my/lsp-bridge-hover-enable)
+(add-hook 'c++-mode-hook #'my/lsp-bridge-hover-enable)
+;; Also enable for rust and python
+(add-hook 'rust-mode-hook #'my/lsp-bridge-hover-enable)
+(add-hook 'python-mode-hook #'my/lsp-bridge-hover-enable)
 
 (provide 'init-lsp-bridge)
 ;;; init-lsp-bridge.el ends here
