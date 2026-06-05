@@ -23,19 +23,18 @@
   :hook
   ((c-mode c++-mode) . (lambda ()
                          (electric-pair-local-mode 1)
+                         (electric-indent-local-mode -1)
                          (setq-local indent-tabs-mode nil)
                          (setq-local tab-width 4)
                          (setq-local c-basic-offset 4)
                          (setq-local c-tab-always-indent t)
+                         ;; 关闭 cc-mode 内建的所有电缩进键
+                         (setq-local c-electric-flag nil)
                                                   ;; 让 lsp-bridge 在保存时格式化
-                         (add-hook 'before-save-hook #'lsp-bridge-code-format nil t)))
+                         (add-hook 'before-save-hook #'clang-format-buffer nil t)))
   :bind
   (("C-c f" . lsp-bridge-code-format)  ;; 改用 lsp-bridge 的格式化
-   ("C-c o" . ff-find-other-file))
-  :config
-  ;; 这个可以删掉了，由 clangd 的 .clang-format 接管
-  ;; (setq clang-format-style "file")
-  )
+   ("C-c o" . ff-find-other-file)))
 
 ;; ========== clang-format 集成 ==========
 (use-package clang-format
