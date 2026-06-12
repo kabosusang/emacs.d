@@ -31,7 +31,8 @@
                          ;; 关闭 cc-mode 内建的所有电缩进键
                          (setq-local c-electric-flag nil)
                                                   ;; 让 lsp-bridge 在保存时格式化
-                         (add-hook 'before-save-hook #'clang-format-buffer nil t)))
+                         (add-hook 'before-save-hook #'lsp-bridge-code-format nil t)
+						 ))
   :bind
   (("C-c f" . lsp-bridge-code-format)  ;; 改用 lsp-bridge 的格式化
    ("C-c o" . ff-find-other-file)))
