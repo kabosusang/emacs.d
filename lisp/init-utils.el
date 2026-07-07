@@ -243,12 +243,6 @@ n
 
 
 
-;; 加载 xclip 包
-(use-package xclip
-  :ensure t
-  :config
-  (xclip-mode 1))
-
 
 
 
