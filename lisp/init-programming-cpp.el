@@ -31,7 +31,7 @@
                          ;; 关闭 cc-mode 内建的所有电缩进键
                          (setq-local c-electric-flag nil)
                                                   ;; 让 lsp-bridge 在保存时格式化
-                         (add-hook 'before-save-hook #'lsp-bridge-code-format nil t)
+                         ;; (add-hook 'before-save-hook #'lsp-bridge-code-format nil t)
 						 ))
   :bind
   (("C-c f" . lsp-bridge-code-format)  ;; 改用 lsp-bridge 的格式化
@@ -147,8 +147,17 @@
         (expand-file-name chosen (expand-file-name "build" root)))))))
 
 (defun cpp/cpp-run-executable (executable)
-  "运行指定的可执行文件"
-  (compile (shell-quote-argument executable)))
+  "运行指定的可执行文件，cwd 切到项目根（解决 Slang dlopen 相对路径问题）"
+  (let* ((root (cpp/c-cpp-project-root))
+         (vcpkg-lib (expand-file-name "vcpkg_installed/x64-linux/lib" root))
+         (default-directory root))   ; ← 关键：cwd 切到项目根
+    (compile
+     (format "bash -c 'exec env LD_LIBRARY_PATH=%s:\"${LD_LIBRARY_PATH:-}\" %s'"
+             (shell-quote-argument vcpkg-lib)
+             (shell-quote-argument executable)))))
+
+
+
 
 ;; ========== 构建命令 ==========
 

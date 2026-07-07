@@ -38,6 +38,7 @@
   (setq lsp-bridge-enable-auto-format-code nil)
   (setq lsp-bridge-enable-debug nil)
   (setq lsp-bridge-enable-inlay-hint t)
+  (setq lsp-bridge-inlay-hint-delay 1.5) 
 
   ;; Language Server Settings
   (setq lsp-bridge-c-lsp-server "clangd")

@@ -239,9 +239,16 @@ n
 ;;让鼠标滚动更好用
 (setq mouse-wheel-scroll-amount ' (1 ((shift) . 1) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
-
-
 (setq ring-bell-function 'ignore)
+
+
+
+;; 加载 xclip 包
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode 1))
+
 
 
 

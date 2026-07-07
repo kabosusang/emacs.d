@@ -18,7 +18,7 @@
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/") t)
 
 ;;; Fire up package.el
-(package-initialize)
+;;(package-initialize)
 
 (provide 'init-elpa)
 ;;; init-elpa.el ends here
