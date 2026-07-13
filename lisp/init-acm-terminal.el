@@ -10,7 +10,6 @@
               
               (add-to-list 'load-path (expand-file-name "vendor/acm-terminal" user-emacs-directory))
               (require 'acm-terminal)
-              
               )))
 
 
@@ -18,7 +17,6 @@
   :ensure t
   :config
   (xclip-mode 1))
-
 
 
 

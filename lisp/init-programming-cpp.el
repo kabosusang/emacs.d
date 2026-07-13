@@ -275,5 +275,33 @@
             (local-set-key (kbd "<f12>") 'cpp/cpp-run-single-file)
             (local-set-key (kbd "C-c d g") 'cpp/gdb-debug)))
 
+
+
+
+(defun cpp/insert-section-separator ()
+  "插入一个带有标题的装饰性分隔符（紧贴代码，无多余空行）"
+  (interactive)
+  (let* ((title (read-string "Section title: "))
+         (desc (read-string "Description (optional): "))
+         (width 80)
+         (line-char ?-)
+         (line (make-string width line-char)))
+    (insert (format "// %s\n" line))
+    (insert (format "// %s\n" title))
+    (when (not (string-empty-p desc))
+      (insert (format "// %s\n" desc)))
+    (insert (format "// %s" line))  ;; 注意：这里没有 \n
+    (end-of-line)))                 ;; 光标移到行尾
+
+
+
+
+;; 快捷键绑定
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c i") 'cpp/insert-section-separator)))
+
+
+
 (provide 'init-programming-cpp)
 ;;; init-programming-cpp.el ends here
